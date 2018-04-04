@@ -1,6 +1,5 @@
 #pragma once
 #include "../NeuralNetwork/NetworkBuilder.hpp"
-#include "../NeuralNetwork/Tools/Clock.hpp"
 #include "../NeuralNetwork/Functions/Functions.hpp"
 
 #include <fstream>
@@ -31,16 +30,18 @@ namespace opml::Examples
 			network = networkBuilder.buildNetwork();
 
 			load_mnist_TrainingData("res/Examples/mnist/mnist_train.csv", &set, 60000);
+			load_mnist_TrainingData("res/Examples/mnist/mnist_test.csv", &testSet, 10000);
 		}
 
-		void run(size_t num_epochs = 10, double eta = 0.1, double wish_error = 0.001)
+		void train(size_t num_epochs = 10, double eta = 0.1, double wish_error = 0.001)
+		{
+			network.train(set, set.size(), num_epochs, eta, wish_error);
+		}
+
+		void test()
 		{
 			size_t count = 0;
 
-			network.train(set, set.size(), num_epochs, eta, wish_error);
-
-			
-			load_mnist_TrainingData("res/Examples/mnist/mnist_test.csv", &testSet, 10000);
 			for (size_t i = 0; i < testSet.size(); ++i)
 			{
 				auto res = network.calculate(testSet.getInput(i));
@@ -70,7 +71,7 @@ namespace opml::Examples
 					++count;
 				}
 			}
-			std::cout << "acc: (" << count << "/10000): "<< count / 10000.0 << "\n\n";
+			std::cout << "acc: (" << count << "/10000): " << count / 10000.0 << "\n\n";
 		}
 
 	private:
@@ -119,16 +120,5 @@ namespace opml::Examples
 		std::vector<DenseLayer> layers;
 		opml::DenseLayer lastDenseLayer;
 		std::shared_ptr<Sigmoid> sigmoid = std::make_shared<Sigmoid>();
-
-		struct executionTimer
-		{
-			~executionTimer()
-			{
-				std::cout << "Time took: " << m_timer.getElapsedTime<double>() << std::endl;
-				system("pause");
-			}
-
-			opml::Clock m_timer;
-		} et;
 	};
 }

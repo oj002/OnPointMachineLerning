@@ -59,8 +59,9 @@ namespace opml
 		
 		void train(TrainSet trainSet, size_t batch_size, size_t maxIterations, double eta, double wishError)
 		{
-			for (int it = 0; it < maxIterations; ++it)
+			for (size_t it = 0; it < maxIterations; ++it)
 			{
+				++iterations;
 				TrainSet currTrainSet = trainSet.extractBatch(batch_size);
 
 				this->overall_error = 0.0;
@@ -69,7 +70,7 @@ namespace opml
 					train(currTrainSet.getInput(k), currTrainSet.getOutput(k), eta, wishError);
 				}
 
-				std::cout << "Iteration: " << it << "\tMSE: " << (this->overall_error / static_cast<double>(currTrainSet.size())) << "\tLearning rate: " << eta << '\n';
+				std::cout << "Iteration: " << iterations << "   MSE: " << (this->overall_error / static_cast<double>(currTrainSet.size())) << "   Learning rate: " << eta << '\n';
 
 				if ((this->overall_error / static_cast<double>(currTrainSet.size())) <= wishError)
 				{
@@ -124,6 +125,7 @@ namespace opml
 	private:
 		InputLayer* inputLayer;
 		OutputLayer* outputLayer{};
+		size_t iterations{ 0 };
 
 		double overall_error;
 	};

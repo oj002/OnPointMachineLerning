@@ -96,4 +96,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".clang-tidy" />
+    <None Include="res.zip" />
+  </ItemGroup>
 </Project>
