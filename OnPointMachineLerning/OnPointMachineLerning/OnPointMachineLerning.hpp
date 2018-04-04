@@ -2,9 +2,9 @@
 #define SFML_STATIC
 #ifdef _OPML_ENABLE_OPENCV
 #ifdef _DEBUG
-
+	#pragma comment(lib, "opencv_world341d.lib")
 #else // _DEBUG
-
+	#pragma comment(lib, "opencv_world341.lib")
 #endif // _DEBUG 
 #endif // _OPML_ENABLE_OPENCV
 

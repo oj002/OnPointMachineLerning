@@ -14,9 +14,9 @@ namespace opml
 			#pragma omp parallel for
 			for (int i = 0; i < this->INPUT_DEPTH; ++i) 
 			{
-				for (int n = 0; n< this->INPUT_WIDTH; ++n) 
+				for (size_t n = 0; n< this->INPUT_WIDTH; ++n)
 				{
-					for (int j = 0; j < this->INPUT_HEIGHT; ++j)
+					for (size_t j = 0; j < this->INPUT_HEIGHT; ++j)
 					{
 						int index = map(i, n, j);
 						output_values00[index] = this->prev_layer->get_output_values()[i][n][j];
@@ -35,9 +35,9 @@ namespace opml
 			#pragma omp parallel for
 			for (int i = 0; i < this->INPUT_DEPTH; ++i) 
 			{
-				for (int n = 0; n< this->INPUT_WIDTH; ++n)
+				for (size_t n = 0; n< this->INPUT_WIDTH; ++n)
 				{
-					for (int j = 0; j < this->INPUT_HEIGHT; ++j)
+					for (size_t j = 0; j < this->INPUT_HEIGHT; ++j)
 					{
 						int index = map(i, n, j);
 						temp[i][n][j] = output_error_values00[index];

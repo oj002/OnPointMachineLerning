@@ -3,8 +3,6 @@
 #include "../OnPointMachineLerning/OnPointMachineLerning.hpp"
 #include <iostream>
 
-
-
 /*
 	Git can't push files larger than 100 mb
 	if they are bigger than 50 mb there will be a warning.
@@ -19,8 +17,13 @@ int main()
 	opml::Examples::Mnist_NN mnist(15 * 15, 10 * 10);
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
+	mnist.show(10);
 
+	#ifdef _OPML_ENABLE_OPENCV
+	cv::waitKey();
+	#else
 	system("pause");
+	#endif // _OPML_ENABLE_OPENCV
+
 	return 0;
 }
-
