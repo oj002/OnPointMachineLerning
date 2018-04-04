@@ -1,6 +1,7 @@
 #pragma once
 #define SFML_STATIC
-#ifdef _OPML_ENABLE_OPENCV
+
+#if _OPML_ENABLE_OPENCV
 #ifdef _DEBUG
 	#pragma comment(lib, "opencv_world341d.lib")
 #else // _DEBUG
@@ -8,7 +9,7 @@
 #endif // _DEBUG 
 #endif // _OPML_ENABLE_OPENCV
 
-#ifdef _OPML_ENABLE_SFML
+#if _OPML_ENABLE_SFML
 #ifdef _DEBUG
 	#pragma comment(lib, "winmm.lib")
 	#pragma comment(lib, "sfml-system-s-d.lib")
@@ -56,8 +57,9 @@
 #endif // _DEBUG 
 #endif // _OPML_ENABLE_SFML
 
+#include "Examples\FlapyBirds_Evo.hpp"
+#include "Examples\Mnist_NN.hpp"
 
-#include "Examples\Mnist.hpp"
 #include "NeuralNetwork\data\TrainSet.hpp"
 #include "NeuralNetwork\Functions\Functions.hpp"
 #include "NeuralNetwork\Layers\DenseLayer.hpp"
@@ -68,6 +70,8 @@
 #include "NeuralNetwork\Layers\TransformLayer.hpp"
 #include "NeuralNetwork\Network.hpp"
 #include "NeuralNetwork\NetworkBuilder.hpp"
-#include "NeuralNetwork\Tools\ArrayTools.hpp"
-#include "NeuralNetwork\Tools\Clock.hpp"
-#include "NeuralNetwork\Tools\Random.hpp"
+#include "Tools\ArrayTools.hpp"
+#include "Tools\Clock.hpp"
+#include "Tools\Random.hpp"
+
+#include "EvoNet\EvoNet.hpp"

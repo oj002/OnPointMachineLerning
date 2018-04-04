@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OnPointMachineLerning\EvoNet\EvoNet.hpp" />
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\Layer.cpp" />
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -376,13 +377,16 @@
     <ClInclude Include="Dependencies\include\SFML\Window\Window.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowHandle.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Examples\Mnist.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\data\TrainSet.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ActivationFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\LeakyReLU.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Linear.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ReLU.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Sigmoid.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Functions.hpp" />
@@ -395,9 +399,9 @@
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\TransformLayer.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Network.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\NetworkBuilder.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\ArrayTools.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Clock.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Random.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Tools\ArrayTools.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Tools\Clock.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Tools\Random.hpp" />
     <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp" />
   </ItemGroup>
   <ItemGroup>

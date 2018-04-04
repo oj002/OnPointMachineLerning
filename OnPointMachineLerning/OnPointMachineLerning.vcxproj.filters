@@ -24,11 +24,11 @@
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OnPointMachineLerning\EvoNet\EvoNet.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OnPointMachineLerning\Examples\Mnist.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -84,15 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\TransformLayer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\ArrayTools.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Clock.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Random.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\opencv\cv.h">
@@ -945,6 +936,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Tools\ArrayTools.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Tools\Clock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Tools\Random.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

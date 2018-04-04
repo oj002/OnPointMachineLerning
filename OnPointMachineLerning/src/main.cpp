@@ -1,5 +1,5 @@
-#define _OPML_ENABLE_OPENCV
-#define _OPML_ENABLE_SFML
+#define _OPML_ENABLE_OPENCV true
+#define _OPML_ENABLE_SFML true
 #include "../OnPointMachineLerning/OnPointMachineLerning.hpp"
 #include <iostream>
 
@@ -14,10 +14,10 @@
 
 int main()
 {
-	opml::Examples::Mnist_NN mnist(15 * 15, 10 * 10);
+	opml::Examples::Mnist_NN mnist(200);
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
-	mnist.show(10);
+	mnist.show(25);
 
 	#ifdef _OPML_ENABLE_OPENCV
 	cv::waitKey();
