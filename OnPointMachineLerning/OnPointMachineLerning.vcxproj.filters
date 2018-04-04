@@ -14,4 +14,86 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OnPointMachineLerning\Examples\Mnist.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Network.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\NetworkBuilder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\data\TrainSet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ActivationFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\LeakyReLU.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Linear.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ReLU.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Sigmoid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Functions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\ConvLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\DenseLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\InputLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\Layer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\PoolingLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\TransformLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\ArrayTools.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Clock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Tools\Random.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
