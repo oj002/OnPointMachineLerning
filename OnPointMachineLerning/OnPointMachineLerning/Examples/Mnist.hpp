@@ -6,6 +6,7 @@
 #include <opencv2\opencv.hpp>
 #endif // _OPML_ENABLE_OPENCV
 #include <fstream>
+#include <string>
 #include <sstream>
 
 namespace opml::Examples
@@ -34,10 +35,13 @@ namespace opml::Examples
 
 			load_mnist_TrainingData("res/Examples/mnist/mnist_train.csv", &set, 60000);
 			load_mnist_TrainingData("res/Examples/mnist/mnist_test.csv", &testSet, 10000);
+			set.shuffle();
+			testSet.shuffle();
 		}
 
 		void train(size_t num_epochs = 10, double eta = 0.1, double wish_error = 0.001)
 		{
+			set.shuffle();
 			network.train(set, set.size(), num_epochs, eta, wish_error);
 		}
 
@@ -98,8 +102,8 @@ namespace opml::Examples
 
 		void test()
 		{
+			testSet.shuffle();
 			size_t count = 0;
-
 			for (size_t i = 0; i < testSet.size(); ++i)
 			{
 				const opml::vector3D &res = network.calculate(testSet.getInput(i));
@@ -136,7 +140,6 @@ namespace opml::Examples
 		void load_mnist_TrainingData(const char* filename, opml::TrainSet* dataSet, size_t trainingSize)
 		{
 			std::ifstream fin(filename);
-
 			if (fin.is_open())
 			{
 				for (size_t i = 0; i < trainingSize; ++i)
@@ -145,26 +148,19 @@ namespace opml::Examples
 					input.reserve(28 * 28);
 					opml::vector3D target(1, opml::vector2D(1, std::vector<double>(10, 0.0)));
 
-					char buff = ' ';
-					int iIndex = 0;
-					fin >> iIndex;
+					std::string line;
+					std::getline(fin, line);
+					std::stringstream lineStream(line);
+					std::string cell;
 
-					target[0][0][iIndex] = 1.0;
-					double val = 0;
+					std::getline(lineStream, cell, ',');
+					target[0][0][std::stoi(cell)] = 1.0;
 
-
-					for (size_t h = 1; h < 29; ++h)
+					while (std::getline(lineStream, cell, ','))
 					{
-						for (size_t w = 0; w < 28; ++w)
-						{
-							fin >> buff;
-							fin >> val;
-
-							input[0][0].emplace_back(val / 255.0);
-						}
+						input[0][0].push_back(std::stoi(cell) / 255.0);
 					}
 					dataSet->addData(input, target);
-
 				}
 			}
 			fin.close();

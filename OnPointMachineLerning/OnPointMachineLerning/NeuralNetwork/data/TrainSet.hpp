@@ -25,7 +25,7 @@ namespace opml
 		{
 		}
 
-		void addData(vector3D  in, vector3D  expected) 
+		void addData(const vector3D &in, const vector3D & expected)
 		{
 			if (in.size() != INPUT_DEPTH ||
 				in[0].size() != INPUT_WIDTH ||
