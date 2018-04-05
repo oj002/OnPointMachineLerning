@@ -1,5 +1,6 @@
 #pragma once
-#include "../Functions/Activation/ActivationFunction.hpp"
+#include "../../Functions/Activation/ActivationFunction.hpp"
+#include "../../Tools/Utils.hpp"
 #include "Layer.hpp"
 #include <memory>
 
@@ -18,7 +19,8 @@ namespace opml
 			std::vector<double>& output_values00(this->output_values[0][0]);
 			std::vector<double>& output_derivative_values00(this->output_derivative_values[0][0]);
 
-			#pragma omp parallel for
+			//__pragma(omp parallel for)
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->OUTPUT_HEIGHT; ++i)
 			{
 				double sum = bias[i];
@@ -41,7 +43,7 @@ namespace opml
 			const std::vector<double>& output_error_values00(this->output_error_values[0][0]);
 			const std::vector<double> prev_output_derivative_values00(this->prev_layer->get_output_derivative_values()[0][0]);
 
-			#pragma omp parallel for
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->INPUT_HEIGHT; ++i)
 			{
 				double sum = 0.0;
@@ -61,7 +63,7 @@ namespace opml
 			const std::vector<double>& output_error_values00(this->output_error_values[0][0]);
 			const std::vector<double> prev_output_values00(this->prev_layer->get_output_values()[0][0]);
 
-			#pragma omp parallel for
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->OUTPUT_HEIGHT; ++i)
 			{
 				double delta = -eta * output_error_values00[i];

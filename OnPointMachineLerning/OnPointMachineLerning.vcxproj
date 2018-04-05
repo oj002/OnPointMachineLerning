@@ -60,9 +60,12 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world341d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,11 +82,14 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(ProjectDir)Dependencies\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)Dependencies\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world341.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -379,17 +385,16 @@
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\data\TrainSet.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ActivationFunction.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\LeakyReLU.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Linear.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ReLU.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Sigmoid.hpp" />
+    <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\ActivationFunction.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\LeakyReLU.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\Linear.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\ReLU.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\Sigmoid.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp" />
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Functions.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\ConvLayer.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\DenseLayer.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\InputLayer.hpp" />
@@ -403,6 +408,7 @@
     <ClInclude Include="OnPointMachineLerning\Tools\Clock.hpp" />
     <ClInclude Include="OnPointMachineLerning\Tools\Random.hpp" />
     <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Tools\Utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-tidy" />

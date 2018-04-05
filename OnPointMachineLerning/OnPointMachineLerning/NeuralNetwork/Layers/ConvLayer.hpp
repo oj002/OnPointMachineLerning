@@ -1,5 +1,6 @@
 #pragma once
-#include "../Functions/Activation/ActivationFunction.hpp"
+#include "../../Functions/Activation/ActivationFunction.hpp"
+#include "../../Tools/Utils.hpp"
 #include "Layer.hpp"
 #include <memory>
 
@@ -18,7 +19,7 @@ namespace opml
 
 		void calculate() override
 		{
-			#pragma omp parallel for
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->OUTPUT_DEPTH; ++i)
 			{
 				for (int j = 0; j < this->OUTPUT_WIDTH; ++j)

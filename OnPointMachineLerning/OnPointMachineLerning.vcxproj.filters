@@ -38,33 +38,6 @@
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\NetworkBuilder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\data\TrainSet.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ActivationFunction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\LeakyReLU.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Linear.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\ReLU.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Activation\Sigmoid.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Functions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\ConvLayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -944,12 +917,6 @@
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Tools\ArrayTools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -957,6 +924,39 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Tools\Random.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\ActivationFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\LeakyReLU.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\Linear.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\ReLU.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\Sigmoid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Tools\Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

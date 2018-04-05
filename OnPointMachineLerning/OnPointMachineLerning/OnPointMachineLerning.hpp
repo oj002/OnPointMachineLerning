@@ -1,67 +1,12 @@
 #pragma once
-#define SFML_STATIC
-
-#if _OPML_ENABLE_OPENCV
-#ifdef _DEBUG
-	#pragma comment(lib, "opencv_world341d.lib")
-#else // _DEBUG
-	#pragma comment(lib, "opencv_world341.lib")
-#endif // _DEBUG 
-#endif // _OPML_ENABLE_OPENCV
-
-#if _OPML_ENABLE_SFML
-#ifdef _DEBUG
-	#pragma comment(lib, "winmm.lib")
-	#pragma comment(lib, "sfml-system-s-d.lib")
-
-	#pragma comment(lib, "ws2_32.lib")
-	#pragma comment(lib, "sfml-network-s-d.lib")
-
-	#pragma comment(lib, "openal32.lib")
-	#pragma comment(lib, "flac.lib")
-	#pragma comment(lib, "vorbisenc.lib")
-	#pragma comment(lib, "vorbisfile.lib")
-	#pragma comment(lib, "vorbis.lib")
-	#pragma comment(lib, "ogg.lib")
-	#pragma comment(lib, "sfml-audio-s-d.lib")
-
-	#pragma comment(lib, "opengl32.lib")
-	#pragma comment(lib, "gdi32.lib")
-	#pragma comment(lib, "sfml-window-s-d.lib")
-
-	#pragma comment(lib, "freetype.lib")
-	#pragma comment(lib, "jpeg.lib")
-	#pragma comment(lib, "sfml-graphics-s-d.lib")
-#else // _DEBUG
-	#pragma comment(lib, "winmm.lib")
-	#pragma comment(lib, "sfml-system-s.lib")
-	
-	#pragma comment(lib, "ws2_32.lib")
-	#pragma comment(lib, "sfml-network-s.lib")
-	
-	#pragma comment(lib, "openal32.lib")
-	#pragma comment(lib, "flac.lib")
-	#pragma comment(lib, "vorbisenc.lib")
-	#pragma comment(lib, "vorbisfile.lib")
-	#pragma comment(lib, "vorbis.lib")
-	#pragma comment(lib, "ogg.lib")
-	#pragma comment(lib, "sfml-audio-s.lib")
-	
-	#pragma comment(lib, "opengl32.lib")
-	#pragma comment(lib, "gdi32.lib")
-	#pragma comment(lib, "sfml-window-s.lib")
-	
-	#pragma comment(lib, "freetype.lib")
-	#pragma comment(lib, "jpeg.lib")
-	#pragma comment(lib, "sfml-graphics-s.lib")
-#endif // _DEBUG 
-#endif // _OPML_ENABLE_SFML
 
 #include "Examples\FlapyBirds_Evo.hpp"
 #include "Examples\Mnist_NN.hpp"
 
-#include "NeuralNetwork\data\TrainSet.hpp"
-#include "NeuralNetwork\Functions\Functions.hpp"
+#include "data\TrainSet.hpp"
+
+#include "NeuralNetwork\Functions\Error\ErrorFunction.hpp"
+#include "NeuralNetwork\Functions\Error\MSE.hpp"
 #include "NeuralNetwork\Layers\DenseLayer.hpp"
 #include "NeuralNetwork\Layers\InputLayer.hpp"
 #include "NeuralNetwork\Layers\Layer.hpp"
@@ -70,8 +15,12 @@
 #include "NeuralNetwork\Layers\TransformLayer.hpp"
 #include "NeuralNetwork\Network.hpp"
 #include "NeuralNetwork\NetworkBuilder.hpp"
+
 #include "Tools\ArrayTools.hpp"
 #include "Tools\Clock.hpp"
 #include "Tools\Random.hpp"
 
 #include "EvoNet\EvoNet.hpp"
+#include "EvoNet\Functions\Crossover\CrossoverFunction.hpp"
+#include "EvoNet\Functions\Crossover\Midpoint.hpp"
+

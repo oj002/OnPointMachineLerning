@@ -1,5 +1,4 @@
-#define _OPML_ENABLE_OPENCV true
-#define _OPML_ENABLE_SFML true
+#define _OPML_ENABLE_OPENMP true
 #include "../OnPointMachineLerning/OnPointMachineLerning.hpp"
 #include <iostream>
 
@@ -14,16 +13,14 @@
 
 int main()
 {
-	opml::Examples::Mnist_NN mnist(200);
+	opml::Examples::FlapyBirds_Evo evo(10);
+	evo.run();
+	/*opml::Examples::Mnist_NN mnist(200);
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
-	mnist.show(25);
+	mnist.show(10);*/
 
-	#ifdef _OPML_ENABLE_OPENCV
 	cv::waitKey();
-	#else
-	system("pause");
-	#endif // _OPML_ENABLE_OPENCV
 
 	return 0;
 }

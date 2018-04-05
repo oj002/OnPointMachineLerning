@@ -11,7 +11,7 @@ namespace opml
 			std::vector<double>& output_values00(this->output_values[0][0]);
 			std::vector<double>& output_derivative_values00(this->output_derivative_values[0][0]);
 
-			#pragma omp parallel for
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->INPUT_DEPTH; ++i) 
 			{
 				for (size_t n = 0; n< this->INPUT_WIDTH; ++n)
@@ -32,7 +32,7 @@ namespace opml
 			const std::vector<double>& output_error_values00(this->output_error_values[0][0]);
 			const std::vector<double> prev_output_derivative_values00(this->prev_layer->get_output_derivative_values()[0][0]);
 
-			#pragma omp parallel for
+			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->INPUT_DEPTH; ++i) 
 			{
 				for (size_t n = 0; n< this->INPUT_WIDTH; ++n)

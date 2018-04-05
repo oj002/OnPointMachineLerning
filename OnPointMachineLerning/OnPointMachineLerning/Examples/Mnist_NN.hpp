@@ -1,10 +1,8 @@
 #pragma once
 #include "../NeuralNetwork/NetworkBuilder.hpp"
-#include "../NeuralNetwork/Functions/Functions.hpp"
+#include "../Functions/Activation/Sigmoid.hpp"
 
-#ifdef _OPML_ENABLE_OPENCV
 #include <opencv2\opencv.hpp>
-#endif // _OPML_ENABLE_OPENCV
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -24,11 +22,11 @@ namespace opml::Examples
 			(layers.emplace_back(layerSizes), ...);
 			for (DenseLayer &layer : layers)
 			{
-				layer.weightsRange(-1, 1).biasRange(-1, 1).setActivationFunction(sigmoid);
+				layer.weightsRange(-0.5, 0.5).biasRange(-0.5, 0.5).setActivationFunction(sigmoid);
 				networkBuilder.addLayer(&layer);
 			}
 			
-			lastDenseLayer.weightsRange(-1, 1).biasRange(-1, 1).setActivationFunction(sigmoid);
+			lastDenseLayer.weightsRange(-0.5, 0.5).biasRange(-0.5, 0.5).setActivationFunction(sigmoid);
 			networkBuilder.addLayer(&lastDenseLayer);
 
 			network = networkBuilder.buildNetwork();
@@ -47,10 +45,8 @@ namespace opml::Examples
 
 		void show(size_t num)
 		{
-			#ifdef _OPML_ENABLE_OPENCV
 			for (size_t i = 0; i < num; ++i)
 			{
-
 				const opml::vector3D &input = testSet.getInput(i);
 				const opml::vector3D &res = network.calculate(input);
 				double resMax = 0.0;
@@ -85,11 +81,11 @@ namespace opml::Examples
 				cv::resize(mat, mat, { 280, 280 });
 				if (resIndex == tarIndex)
 				{
-					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX , 2.5, { 0, 255, 0, 100 });
+					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX , 2.5, { 0, 255, 0 });
 				}
 				else
 				{
-					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX, 2.5, { 0, 0, 255, 100 });
+					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX, 2.5, { 0, 0, 255 });
 				}
 				
 				cv::putText(mat, "press any key to continue...", { 35, 250 }, CV_FONT_HERSHEY_SIMPLEX, 0.5, { 255, 255, 255 });
@@ -97,7 +93,6 @@ namespace opml::Examples
 				cv::waitKey();
 			}
 			cv::destroyWindow("Mnist-Sample-Image");
-			#endif // _OPML_ENABLE_OPENCV
 		}
 
 		void test()
