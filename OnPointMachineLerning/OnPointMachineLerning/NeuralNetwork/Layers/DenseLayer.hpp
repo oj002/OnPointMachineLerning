@@ -19,7 +19,6 @@ namespace opml
 			std::vector<double>& output_values00(this->output_values[0][0]);
 			std::vector<double>& output_derivative_values00(this->output_derivative_values[0][0]);
 
-			//__pragma(omp parallel for)
 			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < this->OUTPUT_HEIGHT; ++i)
 			{

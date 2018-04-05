@@ -8,6 +8,7 @@
 
 namespace opml
 {
+	static rng_mt19937_std rng;
 	class EvoNet
 	{
 	public:
@@ -52,7 +53,7 @@ namespace opml
 			return output[network_size - 1];
 		}
 
-		void mutate(double mutationRate)
+		void mutate(size_t chance)
 		{
 			for (vector2D &vec2 : weights)
 			{
@@ -60,7 +61,7 @@ namespace opml
 				{
 					for (double &d : vec)
 					{
-						if (rng.randomReal<double>(0, 1) < mutationRate)
+						if (rng.randomInteger<size_t>(0, chance) == 0)
 						{
 							d = rng.randomReal<double>(this->lowerWeightsRange, this->upperWeightsRange);
 						}
@@ -69,15 +70,22 @@ namespace opml
 			}
 		}
 
-		void crossover(const EvoNet &parent)
+		EvoNet crossover(const EvoNet &parent)
 		{
+			EvoNet ret{ *this };
+			vector3D newWeights{ this->weights };
 			for (size_t i = 0; i < this->weights.size(); ++i)
 			{
 				for (size_t j = 0; j < this->weights[i].size(); ++j)
 				{
-					crossoverFunction->crossover(this->weights[i][j], parent.weights[i][j], rng);
+					if (this->weights[i][j].size() > 0)
+					{
+						newWeights[i][j] = crossoverFunction->crossover(this->weights[i][j], parent.weights[i][j], rng);
+					}
 				}
 			}
+			ret.weights = newWeights;
+			return ret;
 		}
 
 		EvoNet &setActivationFunction(std::shared_ptr<ActivationFunction> activationFunction)
@@ -92,6 +100,14 @@ namespace opml
 			return *this;
 		}
 
+		EvoNet& weightsRange(double lower, double upper)
+		{
+			this->lowerWeightsRange = lower;
+			this->upperWeightsRange = upper;
+			tools::randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
+			return *this;
+		}
+
 	private:
 		std::vector<size_t> layer_sizes;
 		size_t input_size, output_size, network_size;
@@ -102,7 +118,5 @@ namespace opml
 		double lowerWeightsRange = -0.5f, upperWeightsRange = 0.5f;
 		std::shared_ptr<CrossoverFunction> crossoverFunction;
 		std::shared_ptr<ActivationFunction> activationFunction;
-
-		static rng_mt19937_std rng;
 	};
 } // namespace opml
