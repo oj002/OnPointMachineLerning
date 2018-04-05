@@ -93,7 +93,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="OnPointMachineLerning\EvoNet\EvoNet.hpp" />
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\Layer.cpp" />
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -383,6 +382,7 @@
     <ClInclude Include="Dependencies\include\SFML\Window\Window.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowHandle.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvoNet\EvoNet.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
     <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp" />
@@ -393,6 +393,7 @@
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\Sigmoid.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\TanH.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\ConvLayer.hpp" />

@@ -24,9 +24,6 @@
     <ClCompile Include="OnPointMachineLerning\NeuralNetwork\Layers\OutputLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OnPointMachineLerning\EvoNet\EvoNet.hpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp">
@@ -957,6 +954,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Tools\Utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvoNet\EvoNet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Functions\Activation\TanH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

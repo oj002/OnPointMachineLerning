@@ -4,6 +4,7 @@
 #include <memory>
 #include "../Tools/Random.hpp"
 #include "../Tools/ArrayTools.hpp"
+#include <cassert>
 
 namespace opml
 {
@@ -14,7 +15,6 @@ namespace opml
 	EvoNet(const std::vector<size_t> &inputSizes)
 		: layer_sizes(inputSizes)
 	{
-
 		this->input_size = this->layer_sizes[0];
 		this->network_size = this->layer_sizes.size();
 		this->output_size = this->layer_sizes[this->network_size - 1];
@@ -24,7 +24,7 @@ namespace opml
 
 		for (size_t i = 0; i < this->network_size; ++i)
 		{
-			output[i].reserve(this->layer_sizes[i]);
+			output[i].resize(this->layer_sizes[i]);
 			if (i > 0)
 			{
 				this->weights[i].resize(this->layer_sizes[i], std::vector<double>(this->layer_sizes[i - 1], 0.0));
@@ -35,6 +35,7 @@ namespace opml
 
 		std::vector<double> calculate(const std::vector<double> &input)
 		{
+			assert(input.size() == this->input_size);
 			this->output[0] = input;
 			for (size_t layer = 1; layer < this->network_size; ++layer)
 			{
@@ -77,6 +78,18 @@ namespace opml
 					crossoverFunction->crossover(this->weights[i][j], parent.weights[i][j], rng);
 				}
 			}
+		}
+
+		EvoNet &setActivationFunction(std::shared_ptr<ActivationFunction> activationFunction)
+		{
+			this->activationFunction = activationFunction;
+			return *this;
+		}
+
+		EvoNet &setCrossoverFunction(std::shared_ptr<CrossoverFunction> crossoverFunction)
+		{
+			this->crossoverFunction = crossoverFunction;
+			return *this;
 		}
 
 	private:
