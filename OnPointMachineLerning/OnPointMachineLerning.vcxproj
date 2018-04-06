@@ -383,7 +383,7 @@
     <ClInclude Include="Dependencies\include\SFML\Window\WindowHandle.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvoNet\EvoNet.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Examples\FlappyBirds_Evo.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
     <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp" />
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\ActivationFunction.hpp" />

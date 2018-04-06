@@ -13,7 +13,7 @@
 
 int main()
 {
-	opml::Examples::FlapyBirds_Evo evo(1000, 9);
+	opml::Examples::FlappyBirds_Evo evo(100, 15);
 	evo.run();
 	/*opml::Examples::Mnist_NN mnist(200);
 	mnist.train(10, 0.1, 0.001);

@@ -908,9 +908,6 @@
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\Examples\FlapyBirds_Evo.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -960,6 +957,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\TanH.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Examples\FlappyBirds_Evo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

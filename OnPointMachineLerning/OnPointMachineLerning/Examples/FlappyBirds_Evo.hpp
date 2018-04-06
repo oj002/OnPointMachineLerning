@@ -16,11 +16,11 @@
 namespace opml::Examples
 {
 	static rng_mt19937_std rng;
-	class FlapyBirds_Evo
+	class FlappyBirds_Evo
 	{
 	public:
 		template<typename ...Args>
-		FlapyBirds_Evo(size_t popSize, Args... layerSizes)
+		FlappyBirds_Evo(size_t popSize, Args... layerSizes)
 			: popSize(popSize)
 		{
 			this->layer_sizes.emplace_back(2); // 1: x Distance to pipe 2: y Distance to Pipe gap
@@ -86,6 +86,32 @@ namespace opml::Examples
 					accelerationFactor = std::max(0.1f, accelerationFactor);
 					this->wnd.setFramerateLimit(60 * accelerationFactor);
 				}
+				else if(event.type == sf::Event::MouseButtonPressed)
+				{
+					if (event.mouseButton.button == sf::Mouse::Right)
+					{
+						OPML_PRAGMA_OMP(parallel for)
+						for (int i = 0; i < this->popSize; ++i)
+						{
+							if (this->birds[i].alive)
+							{
+								for (Pipes::PipeShape& p : this->pipes.shapes)
+								{
+									if (p.focused)
+									{
+										this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
+										this->birds[i].alive = false;
+										this->birds[i].fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
+										if (this->birds[i].fitness < 1)
+										{
+											this->birds[i].fitness = 1;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 			
 			this->pipes.update(this->XOFFSET, dt);
@@ -106,12 +132,12 @@ namespace opml::Examples
 
 				if (this->birds[i].alive)
 				{
-					if (this->birds[i].pos < 0 || this->birds[i].pos > this->HEIGHT - this->birds[i].shape.getGlobalBounds().height)
+					/*if (this->birds[i].pos < 0 || this->birds[i].pos > this->HEIGHT - this->birds[i].shape.getGlobalBounds().height)
 					{
 						this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
 						this->birds[i].alive = false;
 						this->birds[i].fitness = std::pow(generationFrameCounter, 2);
-					}
+					}*/
 					for (Pipes::PipeShape& p : this->pipes.shapes)
 					{
 						if (p.focused)
@@ -136,7 +162,11 @@ namespace opml::Examples
 								{
 									this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
 									this->birds[i].alive = false;
-									this->birds[i].fitness = std::pow(generationFrameCounter, 2);
+									this->birds[i].fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
+									if (this->birds[i].fitness < 1)
+									{
+										this->birds[i].fitness = 1;
+									}
 								}
 							}
 						}
@@ -162,7 +192,6 @@ namespace opml::Examples
 			{
 				reset();
 			}
-			// this->nets[i].mutate(100);
 		}
 
 		void reder()
@@ -232,7 +261,7 @@ namespace opml::Examples
 				newNets[i] = childNet;
 			}
 
-			newNets[rng.randomInteger<size_t>(0, newNets.size())] = best;
+			newNets[rng.randomInteger<size_t>(0, newNets.size() - 1)] = best;
 			
 
 			this->nets = newNets;
@@ -266,7 +295,7 @@ namespace opml::Examples
 			void flap() { flaped = true; }
 			void update(float dt, size_t xOffset, float gravity)
 			{
-				if (flaped && vel > gravity / 100.0f)
+				if (flaped && vel > gravity / 10.0f)
 				{
 					acc = 0.0f; vel = -gravity / 4.0f;
 					flaped = false;
@@ -288,14 +317,14 @@ namespace opml::Examples
 		struct Pipes
 		{
 			Pipes() = default;
-			void spawn(size_t wndHeight, size_t wndWidth)
+			void spawn(size_t wndWidth, size_t wndHeight)
 			{
-				sf::RectangleShape top(sf::Vector2f(static_cast<float>(WIDTH), static_cast<float>(wndHeight)));
-				sf::RectangleShape bottom(sf::Vector2f(static_cast<float>(WIDTH), static_cast<float>(wndHeight)));
+				sf::RectangleShape top(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
+				sf::RectangleShape bottom(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
 				bottom.setFillColor({ 255, 100, 0 });
 				top.setFillColor({ 255, 100, 0 });
-				bottom.setPosition(wndHeight, rng.randomInteger<int>(GAP_SIZE, wndHeight - GAP_SIZE * 2));
-				top.setPosition(wndHeight, bottom.getPosition().y - GAP_SIZE - wndHeight);
+				bottom.setPosition(wndWidth, rng.randomInteger<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
+				top.setPosition(wndWidth, bottom.getPosition().y - GAP_SIZE - wndHeight);
 				shapes.emplace_back(top, bottom);
 			}
 
@@ -349,8 +378,8 @@ namespace opml::Examples
 				bool focused = false;
 			};
 			std::vector<PipeShape> shapes;
-			static const size_t WIDTH = 50;
-			static const size_t GAP_SIZE = 150;
+			static const size_t WIDTH = 25;
+			static const size_t GAP_SIZE = 100;
 			const float SPEED = 150.0f;
 		};
 
@@ -369,14 +398,14 @@ namespace opml::Examples
 
 		const size_t popSize;
 		const size_t newPerGeneration = 0;
-		const size_t WIDTH = 800, HEIGHT = 600;
+		const size_t WIDTH = 1024, HEIGHT = 600;
 		const size_t XOFFSET = this->WIDTH / 4;
 		const float GRAVITY = 1000.0f;
-		const size_t MIN_PIP_OFFSET = 250, MAX_PIP_OFFSET = 250;
-		size_t totalNodeCount{0};
+		const size_t MIN_PIP_OFFSET = 150, MAX_PIP_OFFSET = 250;
+		size_t totalNodeCount{ 0 };
 
 		const std::string title{ "FlapyBirds_Evo-Sample-Image" };
-		const float mutationRate{75.0f};
+		const float mutationRate{ 15.0f };
 
 		float accelerationFactor{ 1.0f };
 

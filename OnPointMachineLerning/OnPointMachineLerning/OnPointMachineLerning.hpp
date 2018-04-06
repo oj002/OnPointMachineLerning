@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Examples\FlapyBirds_Evo.hpp"
+#include "Examples\FlappyBirds_Evo.hpp"
 #include "Examples\Mnist_NN.hpp"
 
 #include "data\TrainSet.hpp"
