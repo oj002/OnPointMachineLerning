@@ -63,8 +63,7 @@ namespace opml::Examples
 				++fps;
 				if(fpsC.getElapsedTime<float>() > 1.0)
 				{
-
-					this->wnd.setTitle(this->title + "   FPS: " + std::to_string(fps));
+					this->wnd.setTitle(this->title + "   FPS: " + std::to_string(fps) + "   Generations: " + std::to_string(this->generations));
 					fps = 0;
 					fpsC.restart();
 				}
@@ -163,8 +162,7 @@ namespace opml::Examples
 						}
 					}
 				}
-				// std::cout << in[0] << '\n';
-				// std::cout << in[1] << '\n';
+				
 				if (this->birds[i].alive)
 				{
 					if ((float)this->nets[i].calculate(in)[0] > 0.5)
@@ -219,7 +217,6 @@ namespace opml::Examples
 
 			}
 			this->pipes.spawn(this->WIDTH, this->HEIGHT);
-			std::cout << "\rGeneration: " << this->generations;
 		}
 		
 		void selection()
@@ -396,7 +393,7 @@ namespace opml::Examples
 		size_t totalNodeCount{ 0 };
 
 		const std::string title{ "FlapyBirds_Evo" };
-		const float mutationRate{ 20.0f };
+		const float mutationRate{ 15.0f };
 
 		float accelerationFactor{ 1.0f };
 
