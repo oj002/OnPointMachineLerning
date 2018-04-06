@@ -12,7 +12,7 @@ namespace opml
 		explicit DenseLayer(size_t OUTPUT_HEIGHT)
 			: Layer(1, 1, OUTPUT_HEIGHT)
 		{}
-
+		
 		void calculate() override
 		{
 			const std::vector<double> prev_output_values00(this->prev_layer->get_output_values()[0][0]);
@@ -57,6 +57,7 @@ namespace opml
 
 			this->prev_layer->set_output_error_values(temp);
 		}
+		
 		void updateWeights(double eta) override
 		{
 			const std::vector<double>& output_error_values00(this->output_error_values[0][0]);

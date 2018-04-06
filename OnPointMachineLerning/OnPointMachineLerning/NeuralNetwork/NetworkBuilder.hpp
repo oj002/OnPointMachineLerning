@@ -7,30 +7,38 @@ namespace opml
 	{
 	public:
 		NetworkBuilder(size_t input_depth, size_t input_width, size_t input_height)
-			: inputLayer(input_depth, input_width, input_height)
+			try : inputLayer(input_depth, input_width, input_height)
 		{
 			inputLayer.set_output_error_values(vector3D(input_depth, vector2D(input_width, std::vector<double>(input_height, 0.0))));
 			inputLayer.set_output_derivative_values(inputLayer.get_output_error_values());
 			inputLayer.set_output_values(inputLayer.get_output_error_values());
 		}
+		catch (std::exception &e) { out_opml << e.what() << '\n'; }
 
 		void addLayer(Layer* layer)
 		{
-			layers.emplace_back(layer);
+			try
+			{
+				layers.emplace_back(layer);
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
-
 		Network buildNetwork()
 		{
-			Layer* b = &inputLayer;
-			for (auto & layer : layers)
+			try
 			{
-				layer->connectToPreviouseLayer(b);
-				b = layer;
-			}
-			
-			outputLayer.connectToPreviouseLayer(b);
+				Layer* b = &inputLayer;
+				for (auto & layer : layers)
+				{
+					layer->connectToPreviouseLayer(b);
+					b = layer;
+				}
 
-			return Network(&inputLayer, &outputLayer);
+				outputLayer.connectToPreviouseLayer(b);
+
+				return Network(&inputLayer, &outputLayer);
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 	private:
 		InputLayer inputLayer;

@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Functions/Activation/ActivationFunction.hpp"
-#include "../../Tools/Utils.hpp"
+#include "../../Utils/Utils.hpp"
 #include "Layer.hpp"
 #include <memory>
 

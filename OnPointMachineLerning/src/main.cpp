@@ -9,16 +9,19 @@
 	go into the Team-Explorer-Changes and click ignore this local item.
 
 	Therefore only publish with binary's or large resources in an release.
+
+	Sorry for the bas exception handling, its my first project with it.
 */
 
 int main()
 {
-	opml::Examples::FlappyBirds_Evo evo(100, 15);
+	opml::Examples::FlappyBirds_Evo evo(200, 6);
 	evo.run();
+	/*
 	opml::Examples::Mnist_NN mnist(200);
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
-	mnist.show(10);
+	mnist.show(10);*/
 
 	cv::waitKey();
 

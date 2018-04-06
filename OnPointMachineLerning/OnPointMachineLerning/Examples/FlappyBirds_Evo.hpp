@@ -57,7 +57,7 @@ namespace opml::Examples
 				++generationFrameCounter;
 				float dt = 1 / 60.0f;// std::min(c.restart<float>(), 0.1f);
 				this->update(dt);
-				this->reder();
+				this->render();
 
 
 				++fps;
@@ -129,12 +129,6 @@ namespace opml::Examples
 
 				if (this->birds[i].alive)
 				{
-					/*if (this->birds[i].pos < 0 || this->birds[i].pos > this->HEIGHT - this->birds[i].shape.getGlobalBounds().height)
-					{
-						this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
-						this->birds[i].alive = false;
-						this->birds[i].fitness = std::pow(generationFrameCounter, 2);
-					}*/
 					for (Pipes::PipeShape& p : this->pipes.shapes)
 					{
 						if (p.focused)
@@ -191,7 +185,7 @@ namespace opml::Examples
 			}
 		}
 
-		void reder()
+		void render()
 		{
 			this->wnd.clear();
 			this->pipes.draw(wnd);
@@ -401,8 +395,8 @@ namespace opml::Examples
 		const size_t MIN_PIP_OFFSET = 150, MAX_PIP_OFFSET = 250;
 		size_t totalNodeCount{ 0 };
 
-		const std::string title{ "FlapyBirds_Evo-Sample-Image" };
-		const float mutationRate{ 15.0f };
+		const std::string title{ "FlapyBirds_Evo" };
+		const float mutationRate{ 20.0f };
 
 		float accelerationFactor{ 1.0f };
 

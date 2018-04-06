@@ -5,7 +5,7 @@ namespace opml
 {
 	struct ErrorFunction
 	{
-		virtual inline double overall_error(const OutputLayer& outputLayer, const vector3D& target) = 0;
-		virtual inline void apply(OutputLayer* outputLayer, const vector3D& target) = 0;
+		virtual inline double overall_error(const OutputLayer& outputLayer, const vector3D& target) const noexcept = 0;
+		virtual inline void apply(OutputLayer* outputLayer, const vector3D& target) const noexcept = 0;
 	};
 } // namespace opml
