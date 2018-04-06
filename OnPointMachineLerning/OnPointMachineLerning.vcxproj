@@ -405,11 +405,12 @@
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Layers\TransformLayer.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Network.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\NetworkBuilder.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Tools\ArrayTools.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Tools\Clock.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Tools\Random.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Utils\Exeptions.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Utils\Tools.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Utils\Clock.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Utils\Random.hpp" />
     <ClInclude Include="OnPointMachineLerning\OnPointMachineLerning.hpp" />
-    <ClInclude Include="OnPointMachineLerning\Tools\Utils.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Utils\Utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-tidy" />

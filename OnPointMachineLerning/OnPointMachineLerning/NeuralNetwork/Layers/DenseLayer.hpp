@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Functions/Activation/ActivationFunction.hpp"
-#include "../../Tools/Utils.hpp"
+#include "../../Utils/Utils.hpp"
 #include "Layer.hpp"
 #include <memory>
 
@@ -103,8 +103,8 @@ namespace opml
 			weights.resize(this->OUTPUT_HEIGHT, std::vector<double>(this->INPUT_HEIGHT, 0.0));
 			bias.resize(this->OUTPUT_HEIGHT, 0.0);
 
-			tools::randomizeVec(&weights, this->lowerWeightsRange, this->upperWeightsRange);
-			tools::randomizeVec(&bias, this->lowerBiasRange, this->upperBiasRange);
+			randomizeVec(&weights, this->lowerWeightsRange, this->upperWeightsRange);
+			randomizeVec(&bias, this->lowerBiasRange, this->upperBiasRange);
 		}
 
 	private:

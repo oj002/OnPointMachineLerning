@@ -2,10 +2,6 @@
 
 namespace opml
 {
-	Layer::Layer()
-		 
-	= default;
-
 	Layer::Layer(size_t OUTPUT_DEPTH, size_t OUTPUT_WIDTH, size_t OUTPUT_HEIGHT)
 		: INPUT_DEPTH(0)
 		, INPUT_WIDTH(0)

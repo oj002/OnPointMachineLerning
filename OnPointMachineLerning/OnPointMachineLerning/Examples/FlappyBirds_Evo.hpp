@@ -1,11 +1,9 @@
 #pragma once
 #include "../EvoNet/EvoNet.hpp"
-#include "../Tools/Random.hpp"
+#include "../Utils/Utils.hpp"
 #include "../Functions/Activation/Sigmoid.hpp"
 #include "../EvoNet/Functions/Crossover/Midpoint.hpp"
 #include "../Functions/Activation/TanH.hpp"
-#include "../Tools/Utils.hpp"
-#include "../Tools/Clock.hpp"
 
 #include <SFML\Graphics.hpp>
 
@@ -15,7 +13,6 @@
 
 namespace opml::Examples
 {
-	static rng_mt19937_std rng;
 	class FlappyBirds_Evo
 	{
 	public:
@@ -121,7 +118,7 @@ namespace opml::Examples
 			{
 				this->pipes.spawn(this->WIDTH, this->HEIGHT);
 				offsetCount = 0;
-				offset = rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
+				offset = opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
 			}
 
 			bool allDead{ true };
@@ -211,7 +208,7 @@ namespace opml::Examples
 			selection();
 
 			offsetCount = 0;
-			offset = rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
+			offset = opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
 			generationFrameCounter = 0;
 			++generations;
 			this->birds.clear();
@@ -261,7 +258,7 @@ namespace opml::Examples
 				newNets[i] = childNet;
 			}
 
-			newNets[rng.randomInteger<size_t>(0, newNets.size() - 1)] = best;
+			newNets[opml::rng.randomInteger<size_t>(0, newNets.size() - 1)] = best;
 			
 
 			this->nets = newNets;
@@ -272,10 +269,10 @@ namespace opml::Examples
 			size_t besave{ 0 };
 			while (true)
 			{
-				size_t index{ rng.randomInteger<size_t>(0, this->popSize - 1) };
+				size_t index{ opml::rng.randomInteger<size_t>(0, this->popSize - 1) };
 				Bird &patner{ this->birds[index] };
 
-				float r{ rng.randomReal<float>(0, maxfit) };
+				float r{ opml::rng.randomReal<float>(0, maxfit) };
 				if (r < patner.fitness)
 				{
 					return this->nets[index];
@@ -323,7 +320,7 @@ namespace opml::Examples
 				sf::RectangleShape bottom(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
 				bottom.setFillColor({ 255, 100, 0 });
 				top.setFillColor({ 255, 100, 0 });
-				bottom.setPosition(wndWidth, rng.randomInteger<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
+				bottom.setPosition(wndWidth, opml::rng.randomInteger<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
 				top.setPosition(wndWidth, bottom.getPosition().y - GAP_SIZE - wndHeight);
 				shapes.emplace_back(top, bottom);
 			}
@@ -412,7 +409,7 @@ namespace opml::Examples
 		size_t generationFrameCounter{ 0 };
 		size_t generations{ 0 };
 		size_t offsetCount{ 0 };
-		size_t offset{ rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
+		size_t offset{ opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
 
 	};
 }

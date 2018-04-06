@@ -6,14 +6,17 @@ namespace opml
 {
 	struct TanH : public ActivationFunction
 	{
-		inline double activation(double x) override
+		inline double activation(double x) const noexcept override
 		{
-			return tanh(x);
+			try
+			{
+				return std::tanh(x);
+			} catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		inline double activation_prime(double x) override
+		inline double activation_prime(double x) const noexcept override
 		{
-			return 1.0 - std::pow(tanh(x), 2);
+			return 1.0 - std::pow(activation(x), 2);
 		}
 	};
 }  // namespace opml

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Tools/ArrayTools.hpp"
+#include "../../Utils/Utils.hpp"
 #include <cassert>
 #include <iostream>
 
@@ -9,7 +9,7 @@ namespace opml
 	{
 	public:
 		friend class Network;
-		Layer();
+		Layer() = default;
 
 		Layer(size_t OUTPUT_DEPTH, size_t OUTPUT_WIDTH, size_t OUTPUT_HEIGHT);
 

@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
-#include "../../../Tools/Random.hpp"
+#include "../../../Utils/Utils.hpp"
 
 namespace opml
 {
 	struct CrossoverFunction
 	{
-		virtual inline std::vector<double> crossover(const std::vector<double> &parentA, const std::vector<double> &parentB, rng_mt19937_std &rng) = 0;
+		virtual inline std::vector<double> crossover(const std::vector<double> &parentA, const std::vector<double> &parentB) const = 0;
 	};
 } // namespace opml

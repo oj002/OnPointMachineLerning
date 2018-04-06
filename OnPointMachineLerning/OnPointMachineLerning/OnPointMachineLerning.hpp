@@ -16,9 +16,7 @@
 #include "NeuralNetwork\Network.hpp"
 #include "NeuralNetwork\NetworkBuilder.hpp"
 
-#include "Tools\ArrayTools.hpp"
-#include "Tools\Clock.hpp"
-#include "Tools\Random.hpp"
+#include "Utils\Utils.hpp"
 
 #include "EvoNet\EvoNet.hpp"
 #include "EvoNet\Functions\Crossover\CrossoverFunction.hpp"

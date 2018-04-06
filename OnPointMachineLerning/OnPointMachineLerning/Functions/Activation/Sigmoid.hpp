@@ -6,15 +6,19 @@ namespace opml
 {
 	struct Sigmoid : public ActivationFunction
 	{
-		inline double activation(double x) override
+		inline double activation(double x) const noexcept override
 		{
-			return 1.0 / (1.0 + std::exp(-x));
+			try
+			{
+				return 1.0 / (1.0 + std::exp(-x));
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		inline double activation_prime(double x) override
+		inline double activation_prime(double x) const noexcept override
 		{
 			double temp = activation(x);
-			return  temp * (1 - temp);
+			return temp * (1 - temp);
 		}
 	};
 }  // namespace opml
