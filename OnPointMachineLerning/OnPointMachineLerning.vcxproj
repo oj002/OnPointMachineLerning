@@ -386,6 +386,7 @@
     <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\EvoNet.hpp" />
     <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Population.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\FlappyBirds_Evo.hpp" />
+    <ClInclude Include="OnPointMachineLerning\Examples\Image_Evo.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
     <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp" />
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\ActivationFunction.hpp" />

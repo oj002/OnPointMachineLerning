@@ -18,8 +18,6 @@ namespace opml::Examples
 		template<typename ...Args>
 		FlappyBirds_Evo(size_t popSize, double mutationChance, double mutationAmount, Args... layerSizes)
 			: POP_SIZE(popSize)
-			, MUTATION_CHANCE(mutationChance)
-			, MUTATION_AMOUNT(mutationAmount)
 		{
 			this->layer_sizes.emplace_back(2); // 1: x Distance to pipe 2: y Distance to Pipe gap
 			(this->layer_sizes.push_back(layerSizes), ...);

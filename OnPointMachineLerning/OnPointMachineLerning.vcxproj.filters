@@ -971,6 +971,9 @@
     <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Population.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\Examples\Image_Evo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-tidy" />
