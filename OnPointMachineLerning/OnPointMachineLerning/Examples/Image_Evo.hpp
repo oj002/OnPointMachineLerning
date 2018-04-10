@@ -25,10 +25,10 @@ namespace opml::Examples
 			this->targetWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Target", sf::Style::Close | sf::Style::Titlebar);
 			this->outputWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Output", sf::Style::Close | sf::Style::Titlebar);
 			sf::VideoMode mode(sf::VideoMode::getDesktopMode());
-			this->targetWnd.setPosition(sf::Vector2i(mode.width / 2 - this->WIDTH, mode.height / 2 - this->HEIGHT / 2));
+			this->targetWnd.setPosition(sf::Vector2i(mode.width / 2 - this->WIDTH - 10, mode.height / 2 - this->HEIGHT / 2));
 
 			this->outputImg.create(this->WIDTH, this->HEIGHT);
-			this->outputWnd.setPosition(sf::Vector2i(mode.width / 2, mode.height / 2 - this->HEIGHT / 2));
+			this->outputWnd.setPosition(sf::Vector2i(mode.width / 2 + 10, mode.height / 2 - this->HEIGHT / 2));
 
 			for (size_t i = 0; i < this->NUM_TRIANGLES * 3; ++i)
 			{
@@ -45,7 +45,6 @@ namespace opml::Examples
 				for (size_t y = 0; y < this->HEIGHT; ++y)
 				{
 					fitness += std::abs(img.getPixel(x, y).r - targetImg.getPixel(x, y).r) + std::abs(img.getPixel(x, y).g - targetImg.getPixel(x, y).g) + std::abs(img.getPixel(x, y).b - targetImg.getPixel(x, y).b);
-					maxFitness += targetImg.getPixel(x, y).r + targetImg.getPixel(x, y).g + targetImg.getPixel(x, y).b;
 				}
 			}
 		}
@@ -60,7 +59,7 @@ namespace opml::Examples
 				++iterations;
 				if (iterations % 1000 == 0)
 				{
-					this->outputWnd.setTitle(TITLE + "   Iteration: " + std::to_string(iterations));
+					this->outputWnd.setTitle(TITLE + "   Iter: " + std::to_string(iterations));
 				}
 			}
 			this->targetWnd.close();
@@ -134,38 +133,70 @@ namespace opml::Examples
 
 			if (roulette < 1.0)
 			{
-				size_t index{ rng.randomInteger<size_t>(0, dna.getVertexCount() - 1) };
+				size_t index{ rng.randomInteger<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
 				if (roulette < 0.25)
 				{
 					if (drastic < 1)
 					{
 						dna[index].color.a += rng.randomInteger<short>(255 / -5, 255 / 5);
-						clip<uint8_t>(dna[index].color.a, 0, 255);
-					} else { dna[index].color.a = rng.randomInteger<short>(0, 255); }
+						clip<uint8_t>(dna[index].color.a, 1, 255);
+						dna[index + 1].color.a = dna[index].color.a;
+						dna[index + 2].color.a = dna[index].color.a;
+					}
+					else 
+					{
+						dna[index].color.a = rng.randomInteger<short>(1, 255);
+						dna[index + 1].color.a = dna[index].color.a;
+						dna[index + 2].color.a = dna[index].color.a;
+					}
 				}
 				else if (roulette < 0.5)
 				{
 					if (drastic < 1)
 					{
-						dna[index].color.r += rng.randomInteger<short>(255 / -10, 255 / 10);
+						dna[index].color.r += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.r, 0, 255);
-					} else { dna[index].color.a = rng.randomInteger<short>(0, 255); }
+						dna[index + 1].color.r = dna[index].color.r;
+						dna[index + 2].color.r = dna[index].color.r;
+					} 
+					else
+					{ 
+						dna[index].color.r = rng.randomInteger<short>(0, 255);
+						dna[index + 1].color.r = dna[index].color.r;
+						dna[index + 2].color.r = dna[index].color.r;
+					}
 				}
 				else if (roulette < 0.75)
 				{
 					if (drastic < 1)
 					{
-						dna[index].color.g += rng.randomInteger<short>(255 / -10, 255 / 10);
+						dna[index].color.g += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.g, 0, 255);
-					} else { dna[index].color.a = rng.randomInteger<short>(0, 255); }
+						dna[index + 1].color.g = dna[index].color.g;
+						dna[index + 2].color.g = dna[index].color.g;
+					} 
+					else 
+					{
+						dna[index].color.g = rng.randomInteger<short>(0, 255);
+						dna[index + 1].color.g = dna[index].color.g;
+						dna[index + 2].color.g = dna[index].color.g;
+					}
 				}
 				else
 				{
 					if (drastic < 1)
 					{
-						dna[index].color.b += rng.randomInteger<short>(255 / -10, 255 / 10);
+						dna[index].color.b += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.b, 0, 255);
-					} else { dna[index].color.a = rng.randomInteger<short>(0, 255); }
+						dna[index + 1].color.b = dna[index].color.b;
+						dna[index + 2].color.b = dna[index].color.b;
+					} 
+					else
+					{
+						dna[index].color.b = rng.randomInteger<short>(0, 255);
+						dna[index + 1].color.b = dna[index].color.b;
+						dna[index + 2].color.b = dna[index].color.b;
+					}
 				}
 			}
 			else if (roulette < 2.0)
@@ -175,7 +206,7 @@ namespace opml::Examples
 				{
 					if (drastic < 1)
 					{
-						dna[index].position.x += rng.randomInteger<short>(this->WIDTH / -10, this->WIDTH / 10);
+						dna[index].position.x += rng.randomInteger<short>(this->WIDTH / -5, this->WIDTH / 5);
 						clip<float>(dna[index].position.x, 0, this->WIDTH);
 					}
 					else { dna[index].position.x = rng.randomInteger<short>(0, this->WIDTH); }
@@ -184,7 +215,7 @@ namespace opml::Examples
 				{
 					if (drastic < 1)
 					{
-						dna[index].position.y += rng.randomInteger<short>(this->HEIGHT / -10, this->HEIGHT / 10);
+						dna[index].position.y += rng.randomInteger<short>(this->HEIGHT / -5, this->HEIGHT / 5);
 						clip<float>(dna[index].position.y, 0, this->HEIGHT);
 					} else { dna[index].position.y = rng.randomInteger<short>(0, this->HEIGHT); }
 				}
@@ -201,7 +232,6 @@ namespace opml::Examples
 
 	private:
 		sf::VertexArray dna;
-		size_t maxFitness{ 0 };
 		size_t fitness{ 0 };
 
 		const size_t NUM_TRIANGLES;
