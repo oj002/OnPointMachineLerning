@@ -935,15 +935,6 @@
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnPointMachineLerning\EvoNet\EvoNet.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\TanH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -963,6 +954,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OnPointMachineLerning\Utils\Exeptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Functions\Crossover\CrossoverFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Functions\Crossover\Midpoint.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\EvoNet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\DNA.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Population.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

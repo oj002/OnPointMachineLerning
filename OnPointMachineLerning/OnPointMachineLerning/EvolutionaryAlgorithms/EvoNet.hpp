@@ -1,36 +1,37 @@
 #pragma once
 #include "Functions/Crossover/CrossoverFunction.hpp"
 #include "../Functions/Activation/ActivationFunction.hpp"
-#include <memory>
 #include "../Utils/Utils.hpp"
+#include "DNA.hpp"
+#include <memory>
 #include <cassert>
 
 namespace opml
 {
-	class EvoNet
+	class EvoNet : public DNA<EvoNet>
 	{
 	public:
-	EvoNet(const std::vector<size_t> &inputSizes) noexcept
-		try : layer_sizes(inputSizes)
-	{
-		this->input_size = this->layer_sizes[0];
-		this->network_size = this->layer_sizes.size();
-		this->output_size = this->layer_sizes[this->network_size - 1];
-
-		this->output.resize(this->network_size);
-		this->weights.resize(this->network_size);
-
-		for (size_t i = 0; i < this->network_size; ++i)
+		EvoNet(const std::vector<size_t> &inputSizes) noexcept
+			try : layer_sizes(inputSizes)
 		{
-			output[i].resize(this->layer_sizes[i]);
-			if (i > 0)
+			this->input_size = this->layer_sizes[0];
+			this->network_size = this->layer_sizes.size();
+			this->output_size = this->layer_sizes[this->network_size - 1];
+
+			this->output.resize(this->network_size);
+			this->weights.resize(this->network_size);
+
+			for (size_t i = 0; i < this->network_size; ++i)
 			{
-				this->weights[i].resize(this->layer_sizes[i], std::vector<double>(this->layer_sizes[i - 1], 0.0));
+				output[i].resize(this->layer_sizes[i]);
+				if (i > 0)
+				{
+					this->weights[i].resize(this->layer_sizes[i], std::vector<double>(this->layer_sizes[i - 1], 0.0));
+				}
 			}
+			randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
 		}
-		randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
-	}
-	catch (std::exception &e) { out_opml << e.what() << '\n'; }
+		catch (std::exception &e) { out_opml << e.what() << '\n'; }
 
 		std::vector<double> calculate(const std::vector<double> &input) noexcept
 		{
@@ -50,10 +51,11 @@ namespace opml
 					}
 				}
 				return output[network_size - 1];
-			} catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		void mutate(size_t chance) noexcept
+		virtual void mutate(double persentage) noexcept override
 		{
 			try
 			{
@@ -63,21 +65,22 @@ namespace opml
 					{
 						for (double &d : vec)
 						{
-							if (opml::rng.randomInteger<size_t>(0, chance) == 0)
+							if (opml::rng.randomReal<double>(0, 100) < persentage)
 							{
 								d = opml::rng.randomReal<double>(this->lowerWeightsRange, this->upperWeightsRange);
 							}
 						}
 					}
 				}
-			} catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		EvoNet crossover(const EvoNet &parent) noexcept
+		virtual std::shared_ptr<EvoNet> crossover(const std::shared_ptr<EvoNet> parent) const noexcept override
 		{
 			try
 			{
-				EvoNet ret{ *this };
+				std::shared_ptr<EvoNet> ret{ std::make_shared<EvoNet>(*this) };
 				vector3D newWeights{ this->weights };
 				for (size_t i = 0; i < this->weights.size(); ++i)
 				{
@@ -85,33 +88,31 @@ namespace opml
 					{
 						if (this->weights[i][j].size() > 0)
 						{
-							newWeights[i][j] = crossoverFunction->crossover(this->weights[i][j], parent.weights[i][j]);
+							newWeights[i][j] = crossoverFunction->crossover(this->weights[i][j], parent->weights[i][j]);
 						}
 					}
 				}
-				ret.weights = newWeights;
+				ret->weights = newWeights;
 				return ret;
-			} catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		EvoNet &setActivationFunction(std::shared_ptr<ActivationFunction> activationFunction) noexcept
+		void setActivationFunction(std::shared_ptr<ActivationFunction> activationFunction) noexcept
 		{
 			this->activationFunction = activationFunction;
-			return *this;
 		}
 
-		EvoNet &setCrossoverFunction(std::shared_ptr<CrossoverFunction> crossoverFunction) noexcept
+		void setCrossoverFunction(std::shared_ptr<CrossoverFunction> crossoverFunction) noexcept
 		{
 			this->crossoverFunction = crossoverFunction;
-			return *this;
 		}
 
-		EvoNet& weightsRange(double lower, double upper) noexcept
+		void weightsRange(double lower, double upper) noexcept
 		{
 			this->lowerWeightsRange = lower;
 			this->upperWeightsRange = upper;
 			randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
-			return *this;
 		}
 
 	private:

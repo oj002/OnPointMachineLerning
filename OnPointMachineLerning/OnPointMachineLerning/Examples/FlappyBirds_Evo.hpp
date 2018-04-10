@@ -1,13 +1,12 @@
 #pragma once
-#include "../EvoNet/EvoNet.hpp"
+#include "../EvolutionaryAlgorithms/EvoNet.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Functions/Activation/Sigmoid.hpp"
-#include "../EvoNet/Functions/Crossover/Midpoint.hpp"
+#include "../EvolutionaryAlgorithms/Functions/Crossover/Midpoint.hpp"
 #include "../Functions/Activation/TanH.hpp"
+#include "../EvolutionaryAlgorithms/Population.hpp"
 
 #include <SFML\Graphics.hpp>
-
-
 #include <iostream>
 
 
@@ -17,8 +16,10 @@ namespace opml::Examples
 	{
 	public:
 		template<typename ...Args>
-		FlappyBirds_Evo(size_t popSize, Args... layerSizes)
-			: popSize(popSize)
+		FlappyBirds_Evo(size_t popSize, double mutationChance, double mutationAmount, Args... layerSizes)
+			: POP_SIZE(popSize)
+			, MUTATION_CHANCE(mutationChance)
+			, MUTATION_AMOUNT(mutationAmount)
 		{
 			this->layer_sizes.emplace_back(2); // 1: x Distance to pipe 2: y Distance to Pipe gap
 			(this->layer_sizes.push_back(layerSizes), ...);
@@ -28,17 +29,19 @@ namespace opml::Examples
 				totalNodeCount += layer_sizes[i];
 			}
 
-			this->wnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->title, sf::Style::Close | sf::Style::Titlebar);
+			this->wnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE, sf::Style::Close | sf::Style::Titlebar);
 			this->wnd.setFramerateLimit(60 * accelerationFactor);
 
-			this->nets.reserve(this->popSize);
-			this->birds.resize(this->popSize, Bird(sf::RectangleShape(this->BIRD_SIZE)));
+			this->population.population.reserve(this->POP_SIZE);
+			this->birds.resize(this->POP_SIZE, Bird(sf::RectangleShape(this->BIRD_SIZE)));
 
 			OPML_PRAGMA_OMP(parallel for)
-			for (int i = 0; i < this->popSize; ++i)
+			for (int i = 0; i < this->POP_SIZE; ++i)
 			{
-				this->nets.emplace_back(layer_sizes);
-				this->nets[i].setActivationFunction(sigmoid).setCrossoverFunction(crossover).weightsRange(-1.0, 1.0);
+				this->population.population.emplace_back(std::make_shared<EvoNet>(layer_sizes));
+				this->population.population[i]->setActivationFunction(sigmoid);
+				this->population.population[i]->setCrossoverFunction(crossover);
+				this->population.population[i]->weightsRange(-1.0, 1.0);
 				birds[i].shape.setOrigin({ BIRD_SIZE.x / 2.0f, BIRD_SIZE.y / 2.0f });
 				birds[i].shape.setPosition(this->XOFFSET, this->HEIGHT / 2);
 				birds[i].pos = this->HEIGHT / 2;
@@ -63,7 +66,7 @@ namespace opml::Examples
 				++fps;
 				if(fpsC.getElapsedTime<float>() > 1.0)
 				{
-					this->wnd.setTitle(this->title + "   FPS: " + std::to_string(fps) + "   Generations: " + std::to_string(this->generations));
+					this->wnd.setTitle(this->TITLE + "   FPS: " + std::to_string(fps) + "   Generations: " + std::to_string(this->generations));
 					fps = 0;
 					fpsC.restart();
 				}
@@ -87,7 +90,7 @@ namespace opml::Examples
 					if (event.mouseButton.button == sf::Mouse::Right)
 					{
 						OPML_PRAGMA_OMP(parallel for)
-						for (int i = 0; i < this->popSize; ++i)
+						for (int i = 0; i < this->POP_SIZE; ++i)
 						{
 							if (this->birds[i].alive)
 							{
@@ -97,10 +100,10 @@ namespace opml::Examples
 									{
 										this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
 										this->birds[i].alive = false;
-										this->birds[i].fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
-										if (this->birds[i].fitness < 1)
+										this->population.population[i]->fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
+										if (this->population.population[i]->fitness < 1)
 										{
-											this->birds[i].fitness = 1;
+											this->population.population[i]->fitness = 1;
 										}
 									}
 								}
@@ -122,7 +125,7 @@ namespace opml::Examples
 
 			bool allDead{ true };
 			OPML_PRAGMA_OMP(parallel for)
-			for (int i = 0; i < this->popSize; ++i)
+			for (int i = 0; i < this->POP_SIZE; ++i)
 			{
 				std::vector<double> in({ 0.0, 0.0 });
 
@@ -152,10 +155,10 @@ namespace opml::Examples
 								{
 									this->birds[i].shape.setFillColor({ 0, 0, 0, 0 });
 									this->birds[i].alive = false;
-									this->birds[i].fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
-									if (this->birds[i].fitness < 1)
+									this->population.population[i]->fitness = std::pow(generationFrameCounter, 2) - this->birds[i].pos - p.bottom.getPosition().y;
+									if (this->population.population[i]->fitness < 1)
 									{
-										this->birds[i].fitness = 1;
+										this->population.population[i]->fitness = 1;
 									}
 								}
 							}
@@ -165,7 +168,7 @@ namespace opml::Examples
 				
 				if (this->birds[i].alive)
 				{
-					if ((float)this->nets[i].calculate(in)[0] > 0.5)
+					if (this->population.population[i]->calculate(in)[0] > 0.5)
 					{
 						this->birds[i].flap();
 					}
@@ -197,18 +200,18 @@ namespace opml::Examples
 	private:
 		void reset()
 		{
-			selection();
+			population.nextGeneration(this->MUTATION_CHANCE, this->MUTATION_AMOUNT);
 
 			offsetCount = 0;
 			offset = opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
 			generationFrameCounter = 0;
 			++generations;
 			this->birds.clear();
-			this->birds.resize(this->popSize, Bird(sf::RectangleShape(this->BIRD_SIZE)));
+			this->birds.resize(this->POP_SIZE, Bird(sf::RectangleShape(this->BIRD_SIZE)));
 			this->pipes.reset();
 
 			OPML_PRAGMA_OMP(parallel for)
-			for (int i = 0; i < this->popSize; ++i)
+			for (int i = 0; i < this->POP_SIZE; ++i)
 			{
 				birds[i].shape.setOrigin({ BIRD_SIZE.x / 2.0f, BIRD_SIZE.y / 2.0f });
 				birds[i].shape.setPosition(this->WIDTH / 2, this->XOFFSET);
@@ -219,63 +222,6 @@ namespace opml::Examples
 			this->pipes.spawn(this->WIDTH, this->HEIGHT);
 		}
 		
-		void selection()
-		{
-			std::vector<EvoNet> newNets{ this->nets };
-			double maxfit{ 0 };
-			size_t index{ 0 };
-			for (int i = 0; i < this->popSize; ++i)
-			{
-				if (this->birds[i].fitness > maxfit)
-				{
-					maxfit = this->birds[i].fitness;
-					index = i;
-				}
-			}
-			EvoNet best{ newNets[index] };
-
-			for (int i = 0; i < this->newPerGeneration; ++i)
-			{
-				newNets[i] = { this->layer_sizes };
-				birds[i].fitness = 1.0f;
-			}
-			for (int i = 0; i < this->popSize; ++i)
-			{
-				EvoNet parentA{ acceptReject(maxfit) };
-				EvoNet parentB{ acceptReject(maxfit) };
-				EvoNet childNet{ parentA.crossover(parentB) };
-				childNet.mutate(totalNodeCount * mutationRate);
-
-				newNets[i] = childNet;
-			}
-
-			newNets[opml::rng.randomInteger<size_t>(0, newNets.size() - 1)] = best;
-			
-
-			this->nets = newNets;
-		}
-
-		EvoNet acceptReject(double maxfit)
-		{
-			size_t besave{ 0 };
-			while (true)
-			{
-				size_t index{ opml::rng.randomInteger<size_t>(0, this->popSize - 1) };
-				Bird &patner{ this->birds[index] };
-
-				float r{ opml::rng.randomReal<float>(0, maxfit) };
-				if (r < patner.fitness)
-				{
-					return this->nets[index];
-				}
-				++besave;
-				if (besave > 10000)
-				{
-					// fuck it 
-					return this->nets[index];
-				}
-			}
-		}
 
 		struct Bird
 		{
@@ -296,7 +242,6 @@ namespace opml::Examples
 				shape.setPosition(xOffset, pos);
 			}
 			bool alive = true;
-			double fitness = 0.0f;
 			bool flaped = false;
 			float pos = 0.0f, vel = 0.0f, acc = 0.0f;
 			sf::RectangleShape shape;
@@ -373,7 +318,7 @@ namespace opml::Examples
 
 	private:
 		sf::RenderWindow wnd;
-		std::vector<EvoNet> nets;
+		Population<EvoNet> population;
 		std::vector<Bird> birds;
 		std::vector<size_t> layer_sizes;
 
@@ -384,16 +329,15 @@ namespace opml::Examples
 		const sf::Vector2f BIRD_SIZE { 25.0f, 10.0f };
 
 
-		const size_t popSize;
-		const size_t newPerGeneration = 0;
+		const size_t POP_SIZE;
 		const size_t WIDTH = 1024, HEIGHT = 600;
 		const size_t XOFFSET = this->WIDTH / 4;
 		const float GRAVITY = 1000.0f;
 		const size_t MIN_PIP_OFFSET = 150, MAX_PIP_OFFSET = 250;
 		size_t totalNodeCount{ 0 };
 
-		const std::string title{ "FlapyBirds_Evo" };
-		const float mutationRate{ 15.0f };
+		const std::string TITLE{ "FlapyBirds_Evo" };
+		const double MUTATION_CHANCE, MUTATION_AMOUNT;
 
 		float accelerationFactor{ 1.0f };
 

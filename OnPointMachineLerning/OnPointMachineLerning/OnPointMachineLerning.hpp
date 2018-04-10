@@ -18,7 +18,7 @@
 
 #include "Utils\Utils.hpp"
 
-#include "EvoNet\EvoNet.hpp"
-#include "EvoNet\Functions\Crossover\CrossoverFunction.hpp"
-#include "EvoNet\Functions\Crossover\Midpoint.hpp"
+#include "EvolutionaryAlgorithms\EvoNet.hpp"
+#include "EvolutionaryAlgorithms\Functions\Crossover\CrossoverFunction.hpp"
+#include "EvolutionaryAlgorithms\Functions\Crossover\Midpoint.hpp"
 

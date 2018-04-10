@@ -382,7 +382,9 @@
     <ClInclude Include="Dependencies\include\SFML\Window\Window.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowHandle.hpp" />
     <ClInclude Include="Dependencies\include\SFML\Window\WindowStyle.hpp" />
-    <ClInclude Include="OnPointMachineLerning\EvoNet\EvoNet.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\DNA.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\EvoNet.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Population.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\FlappyBirds_Evo.hpp" />
     <ClInclude Include="OnPointMachineLerning\Examples\Mnist_NN.hpp" />
     <ClInclude Include="OnPointMachineLerning\data\TrainSet.hpp" />
@@ -391,8 +393,8 @@
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\Linear.hpp" />
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\ReLU.hpp" />
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\Sigmoid.hpp" />
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\CrossoverFunction.hpp" />
-    <ClInclude Include="OnPointMachineLerning\EvoNet\Functions\Crossover\Midpoint.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Functions\Crossover\CrossoverFunction.hpp" />
+    <ClInclude Include="OnPointMachineLerning\EvolutionaryAlgorithms\Functions\Crossover\Midpoint.hpp" />
     <ClInclude Include="OnPointMachineLerning\Functions\Activation\TanH.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\ErrorFunction.hpp" />
     <ClInclude Include="OnPointMachineLerning\NeuralNetwork\Functions\Error\MSE.hpp" />

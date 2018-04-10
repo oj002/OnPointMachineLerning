@@ -2,6 +2,7 @@
 #include "../OnPointMachineLerning/OnPointMachineLerning.hpp"
 #include <iostream>
 
+
 /*
 	Git can't push files larger than 100 mb
 	if they are bigger than 50 mb there will be a warning.
@@ -10,18 +11,18 @@
 
 	Therefore only publish with binary's or large resources in an release.
 
-	Sorry for the bas exception handling, its my first project with it.
+	Sorry for the bad exception handling, its my first project extensively using it.
 */
 
 int main()
 {
-	opml::Examples::FlappyBirds_Evo evo(100, 6);
+	opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
 	evo.run();
-	/*
-	opml::Examples::Mnist_NN mnist(200);
+	
+	/*opml::Examples::Mnist_NN mnist(200);
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
-	mnist.show(10);*/
+	mnist.show(100);*/
 
 	cv::waitKey();
 
