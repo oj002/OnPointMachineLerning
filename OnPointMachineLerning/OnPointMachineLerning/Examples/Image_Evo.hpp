@@ -11,10 +11,9 @@ namespace opml::Examples
 	class Image_Evo
 	{
 	public:
-		Image_Evo(size_t numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png", double captureScale = 2.0)
+		Image_Evo(size_t numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png")
 			: NUM_TRIANGLES(numTriangles)
 			, dna(sf::Triangles, numTriangles * 3)
-			, CAPTURE_SCALE(captureScale)
 		{
 			this->targetImg.loadFromFile(imgPath);
 			this->targetTexture.loadFromImage(this->targetImg);
@@ -139,23 +138,23 @@ namespace opml::Examples
 		}
 
 	private:
-		void caputure(const std::string path = "out.png")
+		void caputure(const std::string path = "out.svg")
 		{
-			sf::VertexArray scaled(this->dna);
-			for (size_t i = 0; i < scaled.getVertexCount(); ++i)
+			std::ofstream fout(path);
+			fout << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			fout << "<!DOCTYPE svg>\n";
+			fout << "<svg viewBox=\"0 0 " << std::to_string(this->WIDTH) << ' ' << std::to_string(this->HEIGHT) << "\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+			for (size_t i = 0; i < this->dna.getVertexCount(); i += 3)
 			{
-				scaled[i].position.x *= 5;
-				scaled[i].position.y *= 5;
+				fout << "<polygon points=\"";
+				fout << std::to_string(static_cast<unsigned char>(this->dna[i].position.x)) << ',' << std::to_string(static_cast<unsigned char>(this->dna[i].position.y)) << ' ';
+				fout << std::to_string(static_cast<unsigned char>(this->dna[i + 1].position.x)) << ',' << std::to_string(static_cast<unsigned char>(this->dna[i + 1].position.y)) << ' ';
+				fout << std::to_string(static_cast<unsigned char>(this->dna[i + 2].position.x)) << ',' << std::to_string(static_cast<unsigned char>(this->dna[i + 2].position.y)) << "\" fill=\"rgba(";
+				fout << std::to_string(this->dna[i].color.r) << ',' << std::to_string(this->dna[i].color.g) << ',';
+				fout << std::to_string(this->dna[i].color.b) << ',' << std::to_string(static_cast<double>(this->dna[i].color.a) / 255.0) << ")\"/>\n"; // a dosn't work
 			}
-
-			sf::RenderTexture rTex;
-			rTex.create(this->WIDTH * CAPTURE_SCALE, this->HEIGHT * CAPTURE_SCALE);
-
-			rTex.clear(sf::Color(255, 255, 255, 255));
-			rTex.draw(scaled);
-			rTex.display();
-			sf::Image img(rTex.getTexture().copyToImage());
-			img.saveToFile(path);
+			fout << "</svg>";
+			fout.close();
 		}
 
 		template <typename T>
@@ -175,7 +174,7 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.a += rng.randomInteger<short>(255 / -5, 255 / 5);
+						dna[index].color.a += rng.normal<double>(0, 80);
 						clip<uint8_t>(dna[index].color.a, 1, 255);
 						dna[index + 1].color.a = dna[index].color.a;
 						dna[index + 2].color.a = dna[index].color.a;
@@ -191,7 +190,7 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.r += rng.randomInteger<short>(255 / -5, 255 / 5);
+						dna[index].color.r += rng.normal<double>(0, 80);
 						clip<uint8_t>(dna[index].color.r, 0, 255);
 						dna[index + 1].color.r = dna[index].color.r;
 						dna[index + 2].color.r = dna[index].color.r;
@@ -207,7 +206,7 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.g += rng.randomInteger<short>(255 / -5, 255 / 5);
+						dna[index].color.g += rng.normal<double>(0, 80);
 						clip<uint8_t>(dna[index].color.g, 0, 255);
 						dna[index + 1].color.g = dna[index].color.g;
 						dna[index + 2].color.g = dna[index].color.g;
@@ -223,7 +222,7 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.b += rng.randomInteger<short>(255 / -5, 255 / 5);
+						dna[index].color.b += rng.normal<double>(0, 80);
 						clip<uint8_t>(dna[index].color.b, 0, 255);
 						dna[index + 1].color.b = dna[index].color.b;
 						dna[index + 2].color.b = dna[index].color.b;
@@ -272,7 +271,6 @@ namespace opml::Examples
 		size_t error{ 0 };
 		size_t mutations{ 0 };
 
-		const double CAPTURE_SCALE;
 		const size_t NUM_TRIANGLES;
 		size_t WIDTH, HEIGHT;
 		const std::string TITLE{ "Image_Evo" };

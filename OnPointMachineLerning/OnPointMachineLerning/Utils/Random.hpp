@@ -62,6 +62,16 @@ namespace opml
 			} OPML_INTERNAL_CATCH
 		}
 
+		template<typename T>
+		T normal(T mean, T deviation)
+		{
+			try
+			{
+				std::normal_distribution<T> dist(mean, deviation);
+				return dist(mt);
+			} OPML_INTERNAL_CATCH
+		}
+
 		std::mt19937& getMt19937() noexcept
 		{
 			return mt;

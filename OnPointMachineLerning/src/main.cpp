@@ -18,7 +18,7 @@
 
 int main()
 {
-	opml::Examples::Image_Evo imgEvo(750, "test.png", 5.0);
+	opml::Examples::Image_Evo imgEvo(500);
 	imgEvo.run();
 	/*opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
 	evo.run();*/
@@ -27,7 +27,6 @@ int main()
 	mnist.train(10, 0.1, 0.001);
 	mnist.test();
 	mnist.show(100);*/
-	
 	cv::waitKey();
 
 	return 0;
