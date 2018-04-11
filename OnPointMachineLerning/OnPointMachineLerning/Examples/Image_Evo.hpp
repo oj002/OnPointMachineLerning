@@ -11,9 +11,10 @@ namespace opml::Examples
 	class Image_Evo
 	{
 	public:
-		Image_Evo(size_t numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png")
+		Image_Evo(size_t numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png", double captureScale = 2.0)
 			: NUM_TRIANGLES(numTriangles)
 			, dna(sf::Triangles, numTriangles * 3)
+			, CAPTURE_SCALE(captureScale)
 		{
 			this->targetImg.loadFromFile(imgPath);
 			this->targetTexture.loadFromImage(this->targetImg);
@@ -25,15 +26,20 @@ namespace opml::Examples
 			this->targetWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Target", sf::Style::Close | sf::Style::Titlebar);
 			this->outputWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Output", sf::Style::Close | sf::Style::Titlebar);
 			sf::VideoMode mode(sf::VideoMode::getDesktopMode());
-			this->targetWnd.setPosition(sf::Vector2i(mode.width / 2 - this->WIDTH - 10, mode.height / 2 - this->HEIGHT / 2));
+			this->targetWnd.setPosition(sf::Vector2i(mode.width / 2 - this->WIDTH - 100, mode.height / 2 - this->HEIGHT / 2));
 
 			this->outputImg.create(this->WIDTH, this->HEIGHT);
-			this->outputWnd.setPosition(sf::Vector2i(mode.width / 2 + 10, mode.height / 2 - this->HEIGHT / 2));
+			this->outputWnd.setPosition(sf::Vector2i(mode.width / 2 + 100, mode.height / 2 - this->HEIGHT / 2));
 
 			for (size_t i = 0; i < this->NUM_TRIANGLES * 3; ++i)
 			{
 				dna[i].position = sf::Vector2f(rng.randomInteger<short>(0, this->WIDTH), rng.randomInteger<short>(0, this->HEIGHT));
-				dna[i].color = sf::Color(0, 0, 0, 1);
+				if (i % 3 == 0)
+				{
+					dna[i].color = sf::Color(rng.randomInteger<short>(1, 255), rng.randomInteger<short>(1, 255), rng.randomInteger<short>(1, 255), 1);
+					dna[i + 1].color = dna[i].color;
+					dna[i + 2].color = dna[i].color;
+				}
 			}
 			renderTexture.create(this->WIDTH, this->HEIGHT);
 			renderTexture.clear();
@@ -44,22 +50,22 @@ namespace opml::Examples
 			{
 				for (size_t y = 0; y < this->HEIGHT; ++y)
 				{
-					fitness += std::abs(img.getPixel(x, y).r - targetImg.getPixel(x, y).r) + std::abs(img.getPixel(x, y).g - targetImg.getPixel(x, y).g) + std::abs(img.getPixel(x, y).b - targetImg.getPixel(x, y).b);
+					this->error += std::abs(img.getPixel(x, y).r - targetImg.getPixel(x, y).r) + std::abs(img.getPixel(x, y).g - targetImg.getPixel(x, y).g) + std::abs(img.getPixel(x, y).b - targetImg.getPixel(x, y).b);
 				}
 			}
 		}
 
 		void run()
 		{
-			size_t iterations{ 0 };
+			Clock c;
 			while (this->targetWnd.isOpen() && this->outputWnd.isOpen())
 			{
 				this->update();
 				this->render();
-				++iterations;
-				if (iterations % 1000 == 0)
+				if (c.getElapsedTime<float>() > 0.5f)
 				{
-					this->outputWnd.setTitle(TITLE + "   Iter: " + std::to_string(iterations));
+					this->outputWnd.setTitle(this->TITLE + "   Mut: " + std::to_string(this->mutations) + "   Err: " + std::to_string(this->error));
+					c.restart();
 				}
 			}
 			this->targetWnd.close();
@@ -77,34 +83,46 @@ namespace opml::Examples
 			{
 				if (event.type == sf::Event::Closed) { this->outputWnd.close(); }
 			}
-
-			sf::VertexArray newDNA{ dna };
-			mutate(newDNA);
-
-			renderTexture.clear();
-			renderTexture.draw(newDNA);
-			renderTexture.display();
-			
-			sf::Image img{ renderTexture.getTexture().copyToImage() };
-			double newFitness{ 0 };
-			OPML_PRAGMA_OMP(parallel)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 			{
-				double partialFitness{ 0 };
-				OPML_PRAGMA_OMP(for schedule(static))
-				for (int x = 0; x < this->WIDTH; ++x)
-				{
-					for (size_t y = 0; y < this->HEIGHT; ++y)
-					{
-						partialFitness += std::abs(img.getPixel(x, y).r - targetImg.getPixel(x, y).r) + std::abs(img.getPixel(x, y).g - targetImg.getPixel(x, y).g) + std::abs(img.getPixel(x, y).b - targetImg.getPixel(x, y).b);
-					}
-				}
-				OPML_PRAGMA_OMP(atomic)
-				newFitness += partialFitness;
+				caputure();
 			}
-			if (newFitness < this->fitness)
+
+			for (size_t i = 0; i < 100; ++i)
 			{
-				this->fitness = newFitness;
-				this->dna = newDNA;
+				sf::VertexArray newDNA{ dna };
+				mutate(newDNA);
+
+				renderTexture.clear();
+				renderTexture.draw(newDNA);
+				renderTexture.display();
+
+				sf::Image img{ renderTexture.getTexture().copyToImage() };
+
+				double newError{ 0 };
+				OPML_PRAGMA_OMP(parallel)
+				{
+					double partialError{ 0 };
+					OPML_PRAGMA_OMP(for schedule(dynamic))
+					for (int x = 0; x < this->WIDTH; ++x)
+					{
+						for (size_t y = 0; y < this->HEIGHT; ++y)
+						{
+							sf::Color c(img.getPixel(x, y));
+							sf::Color target(targetImg.getPixel(x, y));
+							partialError += std::abs(c.r - target.r) + std::abs(c.g - target.g) + std::abs(c.b - target.b);
+						}
+					}
+					OPML_PRAGMA_OMP(atomic)
+					newError += partialError;
+				}
+				++mutations;
+				if (newError < this->error)
+				{
+					this->error = newError;
+					this->dna = newDNA;
+					break;
+				}
 			}
 		}
 
@@ -121,6 +139,25 @@ namespace opml::Examples
 		}
 
 	private:
+		void caputure(const std::string path = "out.png")
+		{
+			sf::VertexArray scaled(this->dna);
+			for (size_t i = 0; i < scaled.getVertexCount(); ++i)
+			{
+				scaled[i].position.x *= 5;
+				scaled[i].position.y *= 5;
+			}
+
+			sf::RenderTexture rTex;
+			rTex.create(this->WIDTH * CAPTURE_SCALE, this->HEIGHT * CAPTURE_SCALE);
+
+			rTex.clear(sf::Color(255, 255, 255, 255));
+			rTex.draw(scaled);
+			rTex.display();
+			sf::Image img(rTex.getTexture().copyToImage());
+			img.saveToFile(path);
+		}
+
 		template <typename T>
 		T clip(const T& n, const T& lower, const T& upper) {
 			return std::max(lower, std::min(n, upper));
@@ -129,14 +166,14 @@ namespace opml::Examples
 		void mutate(sf::VertexArray &dna)
 		{
 			double roulette{ rng.randomReal<double>(0, 2.8) };
-			double drastic{ rng.randomReal<double>(0, 2.0) };
+			double drastic{ rng.randomReal<double>(0, 1.0) };
 
 			if (roulette < 1.0)
 			{
 				size_t index{ rng.randomInteger<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
 				if (roulette < 0.25)
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].color.a += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.a, 1, 255);
@@ -152,7 +189,7 @@ namespace opml::Examples
 				}
 				else if (roulette < 0.5)
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].color.r += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.r, 0, 255);
@@ -168,7 +205,7 @@ namespace opml::Examples
 				}
 				else if (roulette < 0.75)
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].color.g += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.g, 0, 255);
@@ -184,7 +221,7 @@ namespace opml::Examples
 				}
 				else
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].color.b += rng.randomInteger<short>(255 / -5, 255 / 5);
 						clip<uint8_t>(dna[index].color.b, 0, 255);
@@ -204,7 +241,7 @@ namespace opml::Examples
 				size_t index{ rng.randomInteger<size_t>(0, dna.getVertexCount() - 1) };
 				if (roulette < 1.5)
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].position.x += rng.randomInteger<short>(this->WIDTH / -5, this->WIDTH / 5);
 						clip<float>(dna[index].position.x, 0, this->WIDTH);
@@ -213,7 +250,7 @@ namespace opml::Examples
 				}
 				else
 				{
-					if (drastic < 1)
+					if (drastic < 0.75)
 					{
 						dna[index].position.y += rng.randomInteger<short>(this->HEIGHT / -5, this->HEIGHT / 5);
 						clip<float>(dna[index].position.y, 0, this->HEIGHT);
@@ -232,8 +269,10 @@ namespace opml::Examples
 
 	private:
 		sf::VertexArray dna;
-		size_t fitness{ 0 };
+		size_t error{ 0 };
+		size_t mutations{ 0 };
 
+		const double CAPTURE_SCALE;
 		const size_t NUM_TRIANGLES;
 		size_t WIDTH, HEIGHT;
 		const std::string TITLE{ "Image_Evo" };

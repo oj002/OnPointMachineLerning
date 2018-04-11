@@ -18,7 +18,7 @@
 
 int main()
 {
-	opml::Examples::Image_Evo imgEvo(150, "test.png");
+	opml::Examples::Image_Evo imgEvo(750, "test.png", 5.0);
 	imgEvo.run();
 	/*opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
 	evo.run();*/
