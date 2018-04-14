@@ -43,7 +43,7 @@ namespace opml
 					TrainSet set = TrainSet(INPUT_DEPTH, INPUT_WIDTH, INPUT_HEIGHT, OUTPUT_DEPTH, OUTPUT_WIDTH, OUTPUT_HEIGHT);
 					for (size_t i = 0; i < size; ++i)
 					{
-						auto index = opml::rng.randomInteger<size_t>(0, this->data.size() - 1);
+						auto index = opml::rng.next<size_t>(0, this->data.size() - 1);
 						set.addData(this->getInput(index), this->getOutput(index));
 					}
 					return set;
@@ -60,7 +60,7 @@ namespace opml
 		{
 			try
 			{
-				std::shuffle(data.begin(), data.end(), opml::rng.getMt19937());
+				std::shuffle(data.begin(), data.end(), opml::rng.mt);
 			} OPML_INTERNAL_CATCH
 		}
 

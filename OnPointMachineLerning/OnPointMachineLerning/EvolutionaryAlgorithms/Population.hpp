@@ -31,7 +31,7 @@ namespace opml
 				std::shared_ptr<T> parentA{ acceptReject(maxfit) };
 				std::shared_ptr<T> parentB{ acceptReject(maxfit) };
 				std::shared_ptr<T> childNet{ parentA->crossover(parentB) };
-				if (rng.randomReal<double>(0, 100) < mutationChance)
+				if (rng.next<double>(0, 100) < mutationChance)
 				{
 					childNet->mutate(mutationAmount);
 				}
@@ -51,9 +51,9 @@ namespace opml
 			size_t besave{ 0 };
 			while (true)
 			{
-				size_t index{ opml::rng.randomInteger<size_t>(0, this->population.size() - 1) };
+				size_t index{ opml::rng.next<size_t>(0, this->population.size() - 1) };
 
-				float r{ opml::rng.randomReal<float>(0, maxfit) };
+				float r{ opml::rng.next<float>(0, maxfit) };
 				if (r < this->population[index]->fitness)
 				{
 					return this->population[index];

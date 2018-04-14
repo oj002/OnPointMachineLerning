@@ -18,16 +18,26 @@
 
 int main()
 {
-	opml::Examples::Image_Evo imgEvo(350, "test.png");
-	imgEvo.run();
+	/*opml::Examples::Image_Evo imgEvo(350);
+	imgEvo.run();*/
 	/*opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
 	evo.run();*/
-	
-	/*opml::Examples::Mnist_NN mnist(200);
-	mnist.train(10, 0.1, 0.001);
-	mnist.test();
-	mnist.show(100);*/
-	cv::waitKey();
 
+	double total{ 0 };
+	for (size_t i = 0; i < 10; i++)
+	{
+		opml::Clock c;
+		opml::Examples::Mnist_NN mnist(200);
+		mnist.train(5, 0.15, 0.001);
+		mnist.test();
+		double elapsed{ c.getElapsedTime<double>() };
+		total += elapsed;
+		std::cout << "Time took: " << elapsed << "s" << std::endl;
+	}
+	std::cout << "Average: " << (total / 10.0) << "s" << std::endl;
+
+	// Average: 27.1962s
+
+	system("pause");
 	return 0;
 }

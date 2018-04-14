@@ -32,10 +32,10 @@ namespace opml::Examples
 
 			for (size_t i = 0; i < this->NUM_TRIANGLES * 3; ++i)
 			{
-				dna[i].position = sf::Vector2f(rng.randomInteger<short>(0, this->WIDTH), rng.randomInteger<short>(0, this->HEIGHT));
+				dna[i].position = sf::Vector2f(rng.next<short>(0, this->WIDTH), rng.next<short>(0, this->HEIGHT));
 				if (i % 3 == 0)
 				{
-					dna[i].color = sf::Color(rng.randomInteger<short>(1, 255), rng.randomInteger<short>(1, 255), rng.randomInteger<short>(1, 255), 1);
+					dna[i].color = sf::Color(rng.next<short>(1, 255), rng.next<short>(1, 255), rng.next<short>(1, 255), 1);
 					dna[i + 1].color = dna[i].color;
 					dna[i + 2].color = dna[i].color;
 				}
@@ -171,24 +171,24 @@ namespace opml::Examples
 
 		void mutate(sf::VertexArray &dna)
 		{
-			double roulette{ rng.randomReal<double>(0, 2.8) };
-			double drastic{ rng.randomReal<double>(0, 1.0) };
+			double roulette{ rng.next<double>(0, 2.8) };
+			double drastic{ rng.next<double>(0, 1.0) };
 
 			if (roulette < 1.0)
 			{
-				size_t index{ rng.randomInteger<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
+				size_t index{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
 				if (roulette < 0.25)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.a += rng.normal<double>(0, 80);
+						dna[index].color.a += rng.next<double>(-25, 25);
 						clip<uint8_t>(dna[index].color.a, 1, 255);
 						dna[index + 1].color.a = dna[index].color.a;
 						dna[index + 2].color.a = dna[index].color.a;
 					}
 					else 
 					{
-						dna[index].color.a = rng.randomInteger<short>(1, 255);
+						dna[index].color.a = rng.next<short>(1, 255);
 						dna[index + 1].color.a = dna[index].color.a;
 						dna[index + 2].color.a = dna[index].color.a;
 					}
@@ -197,14 +197,14 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.r += rng.normal<double>(0, 80);
+						dna[index].color.r += rng.next<double>(-25, 25);
 						clip<uint8_t>(dna[index].color.r, 0, 255);
 						dna[index + 1].color.r = dna[index].color.r;
 						dna[index + 2].color.r = dna[index].color.r;
 					} 
 					else
 					{ 
-						dna[index].color.r = rng.randomInteger<short>(0, 255);
+						dna[index].color.r = rng.next<short>(0, 255);
 						dna[index + 1].color.r = dna[index].color.r;
 						dna[index + 2].color.r = dna[index].color.r;
 					}
@@ -213,14 +213,14 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.g += rng.normal<double>(0, 80);
+						dna[index].color.g += rng.next<double>(-25, 25);
 						clip<uint8_t>(dna[index].color.g, 0, 255);
 						dna[index + 1].color.g = dna[index].color.g;
 						dna[index + 2].color.g = dna[index].color.g;
 					} 
 					else 
 					{
-						dna[index].color.g = rng.randomInteger<short>(0, 255);
+						dna[index].color.g = rng.next<short>(0, 255);
 						dna[index + 1].color.g = dna[index].color.g;
 						dna[index + 2].color.g = dna[index].color.g;
 					}
@@ -229,14 +229,14 @@ namespace opml::Examples
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.b += rng.normal<double>(0, 80);
+						dna[index].color.b += rng.next<double>(-25, 25);
 						clip<uint8_t>(dna[index].color.b, 0, 255);
 						dna[index + 1].color.b = dna[index].color.b;
 						dna[index + 2].color.b = dna[index].color.b;
 					} 
 					else
 					{
-						dna[index].color.b = rng.randomInteger<short>(0, 255);
+						dna[index].color.b = rng.next<short>(0, 255);
 						dna[index + 1].color.b = dna[index].color.b;
 						dna[index + 2].color.b = dna[index].color.b;
 					}
@@ -244,29 +244,29 @@ namespace opml::Examples
 			}
 			else if (roulette < 2.0)
 			{
-				size_t index{ rng.randomInteger<size_t>(0, dna.getVertexCount() - 1) };
+				size_t index{ rng.next<size_t>(0, dna.getVertexCount() - 1) };
 				if (roulette < 1.5)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].position.x += rng.randomInteger<short>(this->WIDTH / -5, this->WIDTH / 5);
+						dna[index].position.x += rng.next<short>(this->WIDTH / -5, this->WIDTH / 5);
 						clip<float>(dna[index].position.x, 0, this->WIDTH);
 					}
-					else { dna[index].position.x = rng.randomInteger<short>(0, this->WIDTH); }
+					else { dna[index].position.x = rng.next<short>(0, this->WIDTH); }
 				}
 				else
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].position.y += rng.randomInteger<short>(this->HEIGHT / -5, this->HEIGHT / 5);
+						dna[index].position.y += rng.next<short>(this->HEIGHT / -5, this->HEIGHT / 5);
 						clip<float>(dna[index].position.y, 0, this->HEIGHT);
-					} else { dna[index].position.y = rng.randomInteger<short>(0, this->HEIGHT); }
+					} else { dna[index].position.y = rng.next<short>(0, this->HEIGHT); }
 				}
 			}
 			else
 			{
-				size_t index{ rng.randomInteger<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
-				size_t destination{ rng.randomInteger<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
+				size_t index{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
+				size_t destination{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
 				std::swap(dna[index], dna[destination]);
 				std::swap(dna[index + 1], dna[destination + 1]);
 				std::swap(dna[index + 2], dna[destination + 2]);

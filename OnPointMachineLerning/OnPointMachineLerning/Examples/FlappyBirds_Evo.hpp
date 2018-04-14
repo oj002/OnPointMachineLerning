@@ -118,7 +118,7 @@ namespace opml::Examples
 			{
 				this->pipes.spawn(this->WIDTH, this->HEIGHT);
 				offsetCount = 0;
-				offset = opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
+				offset = opml::rng.next<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
 			}
 
 			bool allDead{ true };
@@ -201,7 +201,7 @@ namespace opml::Examples
 			population.nextGeneration(this->MUTATION_CHANCE, this->MUTATION_AMOUNT);
 
 			offsetCount = 0;
-			offset = opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
+			offset = opml::rng.next<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET);
 			generationFrameCounter = 0;
 			++generations;
 			this->birds.clear();
@@ -254,7 +254,7 @@ namespace opml::Examples
 				sf::RectangleShape bottom(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
 				bottom.setFillColor({ 255, 100, 0 });
 				top.setFillColor({ 255, 100, 0 });
-				bottom.setPosition(wndWidth, opml::rng.randomInteger<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
+				bottom.setPosition(wndWidth, opml::rng.next<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
 				top.setPosition(wndWidth, bottom.getPosition().y - GAP_SIZE - wndHeight);
 				shapes.emplace_back(top, bottom);
 			}
@@ -342,7 +342,7 @@ namespace opml::Examples
 		size_t generationFrameCounter{ 0 };
 		size_t generations{ 0 };
 		size_t offsetCount{ 0 };
-		size_t offset{ opml::rng.randomInteger<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
+		size_t offset{ opml::rng.next<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
 
 	};
 }

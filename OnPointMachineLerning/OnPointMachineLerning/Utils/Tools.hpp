@@ -39,7 +39,7 @@ namespace opml
 		{
 			for (std::_Vector_iterator<std::_Vector_val<std::_Simple_types<double> > >::value_type & iter : *vec)
 			{
-				iter = opml::rng.randomReal<double>(lowerBound, upperBound);
+				iter = opml::rng.next<double>(lowerBound, upperBound);
 			}
 		} OPML_INTERNAL_CATCH
 	}
@@ -91,10 +91,10 @@ namespace opml
 			std::vector<size_t> values(amount, 0);
 			for (size_t i = 0; i < amount; i++)
 			{
-				auto n = opml::rng.randomInteger<size_t>(lowerBound, upperBound);
+				auto n = opml::rng.next<size_t>(lowerBound, upperBound);
 				while (std::find(values.begin(), values.end(), n) != values.end())
 				{
-					n = opml::rng.randomInteger<size_t>(lowerBound, upperBound);
+					n = opml::rng.next<size_t>(lowerBound, upperBound);
 				}
 				values[i] = n;
 			}
@@ -120,7 +120,7 @@ namespace opml
 
 	static inline double randomValue(double lower, double upper) 
 	{
-		return opml::rng.randomReal<double>(lower, upper);
+		return opml::rng.next<double>(lower, upper);
 	}
 	
 } // namespace opml

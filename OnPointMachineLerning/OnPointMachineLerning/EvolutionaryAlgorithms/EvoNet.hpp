@@ -65,9 +65,9 @@ namespace opml
 					{
 						for (double &d : vec)
 						{
-							if (opml::rng.randomReal<double>(0, 100) < persentage)
+							if (opml::rng.next<double>(0, 100) < persentage)
 							{
-								d = opml::rng.randomReal<double>(this->lowerWeightsRange, this->upperWeightsRange);
+								d = opml::rng.next<double>(this->lowerWeightsRange, this->upperWeightsRange);
 							}
 						}
 					}

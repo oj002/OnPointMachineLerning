@@ -11,9 +11,9 @@ namespace opml
 			{
 				if (parentA.size() == 1)
 				{
-					return (opml::rng.randomInteger<unsigned short>(0, 1) ? parentA : parentB);
+					return (opml::rng.next<unsigned short>(0, 1) ? parentA : parentB);
 				}
-				size_t mid{ opml::rng.randomInteger<unsigned short>(0, parentA.size() - 1) };
+				size_t mid{ opml::rng.next<unsigned short>(0, parentA.size() - 1) };
 
 				std::vector<double> child{ parentA };
 				if (mid == 0)
