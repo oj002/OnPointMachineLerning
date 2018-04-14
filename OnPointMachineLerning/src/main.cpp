@@ -18,10 +18,10 @@
 
 int main()
 {
-	/*opml::Examples::Image_Evo imgEvo(350);
-	imgEvo.run();*/
-	/*opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
-	evo.run();*/
+	opml::Examples::Image_Evo imgEvo(350);
+	imgEvo.run();
+	opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
+	evo.run();
 
 	double total{ 0 };
 	for (size_t i = 0; i < 10; i++)

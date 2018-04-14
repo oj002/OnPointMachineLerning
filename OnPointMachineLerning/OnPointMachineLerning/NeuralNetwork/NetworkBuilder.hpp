@@ -38,7 +38,7 @@ namespace opml
 
 				return Network(&inputLayer, &outputLayer);
 			}
-			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			catch (std::exception &e) { out_opml << e.what() << '\n'; return Network(); }
 		}
 	private:
 		InputLayer inputLayer;

@@ -1,14 +1,14 @@
 #pragma once
-#include <stdexcept>
-#include <string>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 namespace opml
 {
 	static std::string message(const std::string &msg, size_t line, const std::string &function, const std::string &path)
 	{
-		return ("opml_message: " + msg + "\nat line: " + std::to_string(line) + " in function: " + function + "\nfrom file: " + path).c_str();
+		return "opml_message: " + msg + "\nat line: " + std::to_string(line) + " in function: " + function + "\nfrom file: " + path;
 	}
 
 	struct exeption : public std::exception
@@ -28,7 +28,7 @@ namespace opml
 	static class dualOutputStream
 	{
 	public:
-		dualOutputStream(const std::string &filename)
+		explicit dualOutputStream(const std::string &filename) noexcept
 		{
 			try { fout.open(filename, std::ios::trunc); }
 			catch (std::exception const& e) {
@@ -36,10 +36,10 @@ namespace opml
 			}
 		}
 
-		~dualOutputStream() { fout.close(); }
+		~dualOutputStream() noexcept { fout.close(); }
 
 		template<class T>
-		dualOutputStream& operator<<(const T& x)
+		dualOutputStream& operator<<(const T& x) noexcept
 		{
 			try {
 				std::cout << x;
@@ -52,8 +52,8 @@ namespace opml
 		}
 	private:
 		std::ofstream fout;
-	} out_opml = {"opml_log.txt"};
-}
+	} out_opml("opml_log.txt");
+}  // namespace opml
 
 #define OPML_INTERNAL_CATCH catch(std::exception &e) { OPML_THROW(e.what()); }
 #define OPML_MESSAGE(msg) opml::message(msg,  __LINE__, __FUNCTION__, __FILE__)

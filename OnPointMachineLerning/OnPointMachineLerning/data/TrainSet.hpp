@@ -48,11 +48,11 @@ namespace opml
 					}
 					return set;
 				}
-				else
-				{
-					out_opml << OPML_MESSAGE("TrainSet is smaller than specified size, returning a smaller one") << '\n';
-					return *this;
-				}
+				
+				
+				out_opml << OPML_MESSAGE("TrainSet is smaller than specified size, returning a smaller one") << '\n';
+				return *this;
+				
 			} OPML_INTERNAL_CATCH
 		}
 
@@ -70,11 +70,7 @@ namespace opml
 		{
 			try
 			{
-				if (index < this->data.size())
-				{
-					return this->data[index][0];
-				}
-				return {};
+				return this->data[index][0];
 			} OPML_INTERNAL_CATCH
 		}
 
@@ -82,11 +78,7 @@ namespace opml
 		{
 			try
 			{
-				if (index < this->data.size())
-				{
-					return this->data[index][1];
-				}
-				return {};
+			return this->data[index][1];
 			} OPML_INTERNAL_CATCH
 		}
 

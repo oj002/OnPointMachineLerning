@@ -18,7 +18,6 @@
 #endif
 
 #elif defined(_MSC_VER)
-#define OPML_PRAGMA_OMP(x) __pragma(omp x)
 
 #if _OPML_ENABLE_OPENMP && defined(_OPENMP)
 #define OPML_PRAGMA_OMP(x) __pragma(omp x)

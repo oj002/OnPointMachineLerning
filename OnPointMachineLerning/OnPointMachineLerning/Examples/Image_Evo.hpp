@@ -1,6 +1,6 @@
 #pragma once
-#include "../Utils/Utils.hpp"
 #include "../EvolutionaryAlgorithms/Population.hpp"
+#include "../Utils/Utils.hpp"
 
 #include <SFML\Graphics.hpp>
 #include <iostream>
@@ -11,9 +11,9 @@ namespace opml::Examples
 	class Image_Evo
 	{
 	public:
-		Image_Evo(size_t numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png")
-			: NUM_TRIANGLES(numTriangles)
-			, dna(sf::Triangles, numTriangles * 3)
+		explicit Image_Evo(unsigned int numTriangles, const std::string &imgPath = "res/Examples/Mona_Lisa.png")
+			: dna(sf::Triangles, numTriangles * 3)
+			, NUM_TRIANGLES(numTriangles)
 		{
 			this->targetImg.loadFromFile(imgPath);
 			this->targetTexture.loadFromImage(this->targetImg);
@@ -32,10 +32,10 @@ namespace opml::Examples
 
 			for (size_t i = 0; i < this->NUM_TRIANGLES * 3; ++i)
 			{
-				dna[i].position = sf::Vector2f(rng.next<short>(0, this->WIDTH), rng.next<short>(0, this->HEIGHT));
+				dna[i].position = sf::Vector2f(static_cast<float>(rng.next<unsigned int>(0, this->WIDTH)), static_cast<float>(rng.next<unsigned int>(0, this->HEIGHT)));
 				if (i % 3 == 0)
 				{
-					dna[i].color = sf::Color(rng.next<short>(1, 255), rng.next<short>(1, 255), rng.next<short>(1, 255), 1);
+					dna[i].color = sf::Color(static_cast<sf::Uint8>(rng.next<short>(1, 255)), static_cast<sf::Uint8>(rng.next<short>(1, 255)), static_cast<sf::Uint8>(rng.next<short>(1, 255)), 1);
 					dna[i + 1].color = dna[i].color;
 					dna[i + 2].color = dna[i].color;
 				}
@@ -45,9 +45,9 @@ namespace opml::Examples
 			renderTexture.draw(dna);
 			renderTexture.display();
 			sf::Image img{ renderTexture.getTexture().copyToImage() };
-			for (size_t x = 0; x < this->WIDTH; ++x)
+			for (unsigned int x = 0; x < this->WIDTH; ++x)
 			{
-				for (size_t y = 0; y < this->HEIGHT; ++y)
+				for (unsigned int y = 0; y < this->HEIGHT; ++y)
 				{
 					this->error += std::abs(img.getPixel(x, y).r - targetImg.getPixel(x, y).r) + std::abs(img.getPixel(x, y).g - targetImg.getPixel(x, y).g) + std::abs(img.getPixel(x, y).b - targetImg.getPixel(x, y).b);
 				}
@@ -73,7 +73,7 @@ namespace opml::Examples
 
 		void update()
 		{
-			sf::Event event;
+			sf::Event event{};
 			while (this->targetWnd.pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed) { this->targetWnd.close(); }
@@ -102,10 +102,10 @@ namespace opml::Examples
 				OPML_PRAGMA_OMP(parallel)
 				{
 					double partialError{ 0 };
-					OPML_PRAGMA_OMP(for schedule(dynamic))
-					for (int x = 0; x < this->WIDTH; ++x)
+					OPML_PRAGMA_OMP(for)
+					for (int x = 0; x < static_cast<int>(this->WIDTH); ++x)
 					{
-						for (size_t y = 0; y < this->HEIGHT; ++y)
+						for (unsigned int y = 0; y < this->HEIGHT; ++y)
 						{
 							sf::Color c(img.getPixel(x, y));
 							sf::Color target(targetImg.getPixel(x, y));
@@ -138,7 +138,7 @@ namespace opml::Examples
 		}
 
 	private:
-		void caputure(const std::string path = "out")
+		void caputure(const std::string& path = "out")
 		{
 			renderTexture.clear();
 			renderTexture.draw(this->dna);
@@ -169,117 +169,117 @@ namespace opml::Examples
 			return std::max(lower, std::min(n, upper));
 		}
 
-		void mutate(sf::VertexArray &dna)
+		void mutate(sf::VertexArray &_dna)
 		{
 			double roulette{ rng.next<double>(0, 2.8) };
 			double drastic{ rng.next<double>(0, 1.0) };
 
 			if (roulette < 1.0)
 			{
-				size_t index{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
+				size_t index{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
 				if (roulette < 0.25)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.a += rng.next<double>(-25, 25);
-						clip<uint8_t>(dna[index].color.a, 1, 255);
-						dna[index + 1].color.a = dna[index].color.a;
-						dna[index + 2].color.a = dna[index].color.a;
+						_dna[index].color.a += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
+						clip<uint8_t>(_dna[index].color.a, 1, 255);
+						_dna[index + 1].color.a = _dna[index].color.a;
+						_dna[index + 2].color.a = _dna[index].color.a;
 					}
 					else 
 					{
-						dna[index].color.a = rng.next<short>(1, 255);
-						dna[index + 1].color.a = dna[index].color.a;
-						dna[index + 2].color.a = dna[index].color.a;
+						_dna[index].color.a = static_cast<sf::Uint8>(rng.next<short>(1, 255));
+						_dna[index + 1].color.a = _dna[index].color.a;
+						_dna[index + 2].color.a = _dna[index].color.a;
 					}
 				}
 				else if (roulette < 0.5)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.r += rng.next<double>(-25, 25);
-						clip<uint8_t>(dna[index].color.r, 0, 255);
-						dna[index + 1].color.r = dna[index].color.r;
-						dna[index + 2].color.r = dna[index].color.r;
+						_dna[index].color.r += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
+						clip<uint8_t>(_dna[index].color.r, 0, 255);
+						_dna[index + 1].color.r = _dna[index].color.r;
+						_dna[index + 2].color.r = _dna[index].color.r;
 					} 
 					else
 					{ 
-						dna[index].color.r = rng.next<short>(0, 255);
-						dna[index + 1].color.r = dna[index].color.r;
-						dna[index + 2].color.r = dna[index].color.r;
+						_dna[index].color.r = static_cast<sf::Uint8>(rng.next<short>(0, 255));
+						_dna[index + 1].color.r = _dna[index].color.r;
+						_dna[index + 2].color.r = _dna[index].color.r;
 					}
 				}
 				else if (roulette < 0.75)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.g += rng.next<double>(-25, 25);
-						clip<uint8_t>(dna[index].color.g, 0, 255);
-						dna[index + 1].color.g = dna[index].color.g;
-						dna[index + 2].color.g = dna[index].color.g;
+						_dna[index].color.g += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
+						clip<uint8_t>(_dna[index].color.g, 0, 255);
+						_dna[index + 1].color.g = _dna[index].color.g;
+						_dna[index + 2].color.g = _dna[index].color.g;
 					} 
 					else 
 					{
-						dna[index].color.g = rng.next<short>(0, 255);
-						dna[index + 1].color.g = dna[index].color.g;
-						dna[index + 2].color.g = dna[index].color.g;
+						_dna[index].color.g = static_cast<sf::Uint8>(rng.next<short>(0, 255));
+						_dna[index + 1].color.g = _dna[index].color.g;
+						_dna[index + 2].color.g = _dna[index].color.g;
 					}
 				}
 				else
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].color.b += rng.next<double>(-25, 25);
-						clip<uint8_t>(dna[index].color.b, 0, 255);
-						dna[index + 1].color.b = dna[index].color.b;
-						dna[index + 2].color.b = dna[index].color.b;
+						_dna[index].color.b += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
+						clip<uint8_t>(_dna[index].color.b, 0, 255);
+						_dna[index + 1].color.b = _dna[index].color.b;
+						_dna[index + 2].color.b = _dna[index].color.b;
 					} 
 					else
 					{
-						dna[index].color.b = rng.next<short>(0, 255);
-						dna[index + 1].color.b = dna[index].color.b;
-						dna[index + 2].color.b = dna[index].color.b;
+						_dna[index].color.b = static_cast<sf::Uint8>(rng.next<short>(0, 255));
+						_dna[index + 1].color.b = _dna[index].color.b;
+						_dna[index + 2].color.b = _dna[index].color.b;
 					}
 				}
 			}
 			else if (roulette < 2.0)
 			{
-				size_t index{ rng.next<size_t>(0, dna.getVertexCount() - 1) };
+				size_t index{ rng.next<size_t>(0, _dna.getVertexCount() - 1) };
 				if (roulette < 1.5)
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].position.x += rng.next<short>(this->WIDTH / -5, this->WIDTH / 5);
-						clip<float>(dna[index].position.x, 0, this->WIDTH);
+						_dna[index].position.x += rng.next<unsigned int>(this->WIDTH / -5, this->WIDTH / 5);
+						clip<float>(_dna[index].position.x, 0.0f, static_cast<float>(this->WIDTH));
 					}
-					else { dna[index].position.x = rng.next<short>(0, this->WIDTH); }
+					else { _dna[index].position.x = static_cast<float>(rng.next<unsigned int>(0, this->WIDTH)); }
 				}
 				else
 				{
 					if (drastic < 0.75)
 					{
-						dna[index].position.y += rng.next<short>(this->HEIGHT / -5, this->HEIGHT / 5);
-						clip<float>(dna[index].position.y, 0, this->HEIGHT);
-					} else { dna[index].position.y = rng.next<short>(0, this->HEIGHT); }
+						_dna[index].position.y += rng.next<unsigned int>(this->HEIGHT / -5, this->HEIGHT / 5);
+						clip<float>(_dna[index].position.y, 0.0f, static_cast<float>(this->HEIGHT));
+					} else { _dna[index].position.y = static_cast<float>(rng.next<unsigned int>(0, this->HEIGHT)); }
 				}
 			}
 			else
 			{
-				size_t index{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
-				size_t destination{ rng.next<size_t>(0, (dna.getVertexCount() - 3) / 3) * 3 };
-				std::swap(dna[index], dna[destination]);
-				std::swap(dna[index + 1], dna[destination + 1]);
-				std::swap(dna[index + 2], dna[destination + 2]);
+				size_t index{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
+				size_t destination{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
+				std::swap(_dna[index], _dna[destination]);
+				std::swap(_dna[index + 1], _dna[destination + 1]);
+				std::swap(_dna[index + 2], _dna[destination + 2]);
 			}
 		}
 
 	private:
 		sf::VertexArray dna;
-		size_t error{ 0 };
-		size_t mutations{ 0 };
+		double error{ 0 };
+		unsigned int mutations{ 0 };
 
-		const size_t NUM_TRIANGLES;
-		size_t WIDTH, HEIGHT;
+		const unsigned int NUM_TRIANGLES;
+		unsigned int WIDTH, HEIGHT;
 		const std::string TITLE{ "Image_Evo" };
 
 		sf::Image targetImg;
@@ -291,4 +291,4 @@ namespace opml::Examples
 		sf::RenderWindow outputWnd;
 		sf::RenderTexture renderTexture;
 	};
-}
+}  // namespace Examples  // namespace opml

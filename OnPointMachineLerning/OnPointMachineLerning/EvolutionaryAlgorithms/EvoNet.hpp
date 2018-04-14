@@ -1,38 +1,42 @@
 #pragma once
-#include "Functions/Crossover/CrossoverFunction.hpp"
 #include "../Functions/Activation/ActivationFunction.hpp"
 #include "../Utils/Utils.hpp"
 #include "DNA.hpp"
-#include <memory>
+#include "Functions/Crossover/CrossoverFunction.hpp"
 #include <cassert>
+#include <memory>
+#include <utility>
+#include <utility>
 
 namespace opml
 {
 	class EvoNet : public DNA<EvoNet>
 	{
 	public:
-		EvoNet(const std::vector<size_t> &inputSizes) noexcept
-			try : layer_sizes(inputSizes)
+		explicit EvoNet(std::vector<size_t> inputSizes) noexcept
+			: layer_sizes(std::move(inputSizes))
 		{
-			this->input_size = this->layer_sizes[0];
-			this->network_size = this->layer_sizes.size();
-			this->output_size = this->layer_sizes[this->network_size - 1];
-
-			this->output.resize(this->network_size);
-			this->weights.resize(this->network_size);
-
-			for (size_t i = 0; i < this->network_size; ++i)
+			try
 			{
-				output[i].resize(this->layer_sizes[i]);
-				if (i > 0)
-				{
-					this->weights[i].resize(this->layer_sizes[i], std::vector<double>(this->layer_sizes[i - 1], 0.0));
-				}
-			}
-			randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
-		}
-		catch (std::exception &e) { out_opml << e.what() << '\n'; }
+				this->input_size = this->layer_sizes[0];
+				this->network_size = this->layer_sizes.size();
+				this->output_size = this->layer_sizes[this->network_size - 1];
 
+				this->output.resize(this->network_size);
+				this->weights.resize(this->network_size);
+
+				for (size_t i = 0; i < this->network_size; ++i)
+				{
+					output[i].resize(this->layer_sizes[i]);
+					if (i > 0)
+					{
+						this->weights[i].resize(this->layer_sizes[i], std::vector<double>(this->layer_sizes[i - 1], 0.0));
+					}
+				}
+				randomizeVec(&this->weights, this->lowerWeightsRange, this->upperWeightsRange);
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+		}
 		std::vector<double> calculate(const std::vector<double> &input) noexcept
 		{
 			try
@@ -50,12 +54,12 @@ namespace opml
 						output[layer][neuron] = activationFunction->activation(sum);
 					}
 				}
-				return output[network_size - 1];
 			}
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			return output[network_size - 1];
 		}
 
-		virtual void mutate(double persentage) noexcept override
+		void mutate(double persentage) noexcept override
 		{
 			try
 			{
@@ -76,17 +80,17 @@ namespace opml
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		virtual std::shared_ptr<EvoNet> crossover(const std::shared_ptr<EvoNet> parent) const noexcept override
+		std::shared_ptr<EvoNet> crossover(const std::shared_ptr<EvoNet> parent) const noexcept override
 		{
 			try
 			{
-				std::shared_ptr<EvoNet> ret{ std::make_shared<EvoNet>(*this) };
+				std::shared_ptr<EvoNet> ret{ parent };
 				vector3D newWeights{ this->weights };
 				for (size_t i = 0; i < this->weights.size(); ++i)
 				{
 					for (size_t j = 0; j < this->weights[i].size(); ++j)
 					{
-						if (this->weights[i][j].size() > 0)
+						if (!this->weights[i][j].empty())
 						{
 							newWeights[i][j] = crossoverFunction->crossover(this->weights[i][j], parent->weights[i][j]);
 						}
@@ -95,17 +99,17 @@ namespace opml
 				ret->weights = newWeights;
 				return ret;
 			}
-			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			catch (std::exception &e) { out_opml << e.what() << '\n'; return parent; }
 		}
 
-		void setActivationFunction(std::shared_ptr<ActivationFunction> activationFunction) noexcept
+		void setActivationFunction(std::shared_ptr<ActivationFunction> newActivationFunction) noexcept
 		{
-			this->activationFunction = activationFunction;
+			this->activationFunction = std::move(newActivationFunction);
 		}
 
-		void setCrossoverFunction(std::shared_ptr<CrossoverFunction> crossoverFunction) noexcept
+		void setCrossoverFunction(std::shared_ptr<CrossoverFunction> newCrossoverFunction) noexcept
 		{
-			this->crossoverFunction = crossoverFunction;
+			this->crossoverFunction = std::move(newCrossoverFunction);
 		}
 
 		void weightsRange(double lower, double upper) noexcept

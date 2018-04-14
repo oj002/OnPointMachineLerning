@@ -11,7 +11,8 @@ namespace opml
 			try
 			{
 				return std::tanh(x);
-			} catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			}
+			catch (std::exception &e) { out_opml << e.what() << '\n'; return x; }
 		}
 
 		inline double activation_prime(double x) const noexcept override

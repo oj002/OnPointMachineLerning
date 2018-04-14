@@ -1,11 +1,11 @@
 #pragma once
-#include "../NeuralNetwork/NetworkBuilder.hpp"
 #include "../Functions/Activation/Sigmoid.hpp"
+#include "../NeuralNetwork/NetworkBuilder.hpp"
 
-#include <opencv2\opencv.hpp>
 #include <fstream>
-#include <string>
+#include <opencv2\opencv.hpp>
 #include <sstream>
+#include <string>
 
 namespace opml::Examples
 {
@@ -13,7 +13,7 @@ namespace opml::Examples
 	{
 	public:
 		template<typename ...Args>
-		Mnist_NN(Args... layerSizes)
+		explicit Mnist_NN(Args... layerSizes)
 			: networkBuilder(1, 1, 28 * 28)
 			, set(1, 1, 28 * 28, 1, 1, 10)
 			, testSet(1, 1, 28 * 28, 1, 1, 10)
@@ -71,9 +71,9 @@ namespace opml::Examples
 					}
 				}
 				cv::Mat mat = cv::Mat::ones(28, 28, CV_32FC3);
-				for (size_t x = 0; x < 28; ++x)
+				for (int x = 0; x < 28; ++x)
 				{
-					for (size_t y = 0; y < 28; ++y)
+					for (int y = 0; y < 28; ++y)
 					{
 						mat.at<cv::Vec3f>(x, y) = cv::Vec3f(static_cast<float>(input[0][0][x * 28 + y]));
 					}
@@ -170,4 +170,4 @@ namespace opml::Examples
 		opml::DenseLayer lastDenseLayer;
 		std::shared_ptr<Sigmoid> sigmoid = std::make_shared<Sigmoid>();
 	};
-}
+} // namespace Examples // namespace opml

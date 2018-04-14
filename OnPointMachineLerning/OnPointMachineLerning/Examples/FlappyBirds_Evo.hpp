@@ -1,13 +1,14 @@
 #pragma once
 #include "../EvolutionaryAlgorithms/EvoNet.hpp"
-#include "../Utils/Utils.hpp"
-#include "../Functions/Activation/Sigmoid.hpp"
 #include "../EvolutionaryAlgorithms/Functions/Crossover/Midpoint.hpp"
-#include "../Functions/Activation/TanH.hpp"
 #include "../EvolutionaryAlgorithms/Population.hpp"
+#include "../Functions/Activation/Sigmoid.hpp"
+#include "../Functions/Activation/TanH.hpp"
+#include "../Utils/Utils.hpp"
 
 #include <SFML\Graphics.hpp>
 #include <iostream>
+#include <utility>
 
 
 namespace opml::Examples
@@ -18,6 +19,8 @@ namespace opml::Examples
 		template<typename ...Args>
 		FlappyBirds_Evo(size_t popSize, double mutationChance, double mutationAmount, Args... layerSizes)
 			: POP_SIZE(popSize)
+			, MUTATION_CHANCE(mutationChance)
+			, MUTATION_AMOUNT(mutationAmount)
 		{
 			this->layer_sizes.emplace_back(2); // 1: x Distance to pipe 2: y Distance to Pipe gap
 			(this->layer_sizes.push_back(layerSizes), ...);
@@ -28,7 +31,7 @@ namespace opml::Examples
 			}
 
 			this->wnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE, sf::Style::Close | sf::Style::Titlebar);
-			this->wnd.setFramerateLimit(60 * accelerationFactor);
+			this->wnd.setFramerateLimit(static_cast<unsigned int>(60 * accelerationFactor));
 
 			this->population.population.reserve(this->POP_SIZE);
 			this->birds.resize(this->POP_SIZE, Bird(sf::RectangleShape(this->BIRD_SIZE)));
@@ -41,8 +44,8 @@ namespace opml::Examples
 				this->population.population[i]->setCrossoverFunction(crossover);
 				this->population.population[i]->weightsRange(-1.0, 1.0);
 				birds[i].shape.setOrigin({ BIRD_SIZE.x / 2.0f, BIRD_SIZE.y / 2.0f });
-				birds[i].shape.setPosition(this->XOFFSET, this->HEIGHT / 2);
-				birds[i].pos = this->HEIGHT / 2;
+				birds[i].shape.setPosition(static_cast<float>(this->XOFFSET), this->HEIGHT / 2.0f);
+				birds[i].pos = this->HEIGHT / 2.0f;
 				birds[i].shape.setFillColor({ 255, 255, 255, 45 });
 			}
 			this->pipes.spawn(this->WIDTH, this->HEIGHT);
@@ -73,7 +76,7 @@ namespace opml::Examples
 	private:
 		void update(float dt)
 		{
-			sf::Event event;
+			sf::Event event{};
 			while (this->wnd.pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed) { this->wnd.close(); }
@@ -81,7 +84,7 @@ namespace opml::Examples
 				{
 					accelerationFactor += event.mouseWheel.delta / 5.0f;
 					accelerationFactor = std::max(0.1f, accelerationFactor);
-					this->wnd.setFramerateLimit(60 * accelerationFactor);
+					this->wnd.setFramerateLimit(static_cast<unsigned int>(60 * accelerationFactor));
 				}
 				else if(event.type == sf::Event::MouseButtonPressed)
 				{
@@ -212,8 +215,8 @@ namespace opml::Examples
 			for (int i = 0; i < this->POP_SIZE; ++i)
 			{
 				birds[i].shape.setOrigin({ BIRD_SIZE.x / 2.0f, BIRD_SIZE.y / 2.0f });
-				birds[i].shape.setPosition(this->WIDTH / 2, this->XOFFSET);
-				birds[i].pos = this->WIDTH / 2;
+				birds[i].shape.setPosition(this->WIDTH / 2.0f, static_cast<float>(this->XOFFSET));
+				birds[i].pos = this->WIDTH / 2.0f;
 				birds[i].shape.setFillColor({ 255, 255, 255, 45 });
 
 			}
@@ -223,7 +226,7 @@ namespace opml::Examples
 
 		struct Bird
 		{
-			Bird(const sf::RectangleShape &shape) : shape(shape) {}
+			explicit Bird(sf::RectangleShape shape) : shape(std::move(shape)) {}
 			void flap() { flaped = true; }
 			void update(float dt, size_t xOffset, float gravity)
 			{
@@ -237,7 +240,7 @@ namespace opml::Examples
 				if (acc > gravity) { acc = gravity; }
 				vel += acc * dt; 
 				pos += vel * dt;
-				shape.setPosition(xOffset, pos);
+				shape.setPosition(static_cast<float>(xOffset), pos);
 			}
 			bool alive = true;
 			bool flaped = false;
@@ -248,21 +251,21 @@ namespace opml::Examples
 		struct Pipes
 		{
 			Pipes() = default;
-			void spawn(size_t wndWidth, size_t wndHeight)
+			void spawn(int wndWidth, int wndHeight)
 			{
 				sf::RectangleShape top(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
 				sf::RectangleShape bottom(sf::Vector2f(static_cast<float>(this->WIDTH), static_cast<float>(wndHeight)));
 				bottom.setFillColor({ 255, 100, 0 });
 				top.setFillColor({ 255, 100, 0 });
-				bottom.setPosition(wndWidth, opml::rng.next<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE));
-				top.setPosition(wndWidth, bottom.getPosition().y - GAP_SIZE - wndHeight);
+				bottom.setPosition(static_cast<float>(wndWidth), static_cast<float>(opml::rng.next<int>(GAP_SIZE * 2, wndHeight - GAP_SIZE)));
+				top.setPosition(static_cast<float>(wndWidth), bottom.getPosition().y - GAP_SIZE - wndHeight);
 				shapes.emplace_back(top, bottom);
 			}
 
 			void update(size_t xOffset, float dt)
 			{
 				bool found{ false };
-				for (std::vector<PipeShape>::iterator it = shapes.begin(); it != shapes.end(); ++it)
+				for (auto it = shapes.begin(); it != shapes.end(); ++it)
 				{
 					it->focused = false;
 					if (!found  && it->bottom.getPosition().x + it->bottom.getGlobalBounds().width > xOffset)
@@ -301,8 +304,8 @@ namespace opml::Examples
 
 			struct PipeShape
 			{
-				PipeShape(const sf::RectangleShape &top, const sf::RectangleShape &bottom)
-					: top(top), bottom(bottom)
+				PipeShape(sf::RectangleShape top, sf::RectangleShape bottom)
+					: top(std::move(top)), bottom(std::move(bottom))
 				{}
 				sf::RectangleShape top;
 				sf::RectangleShape bottom;
@@ -328,7 +331,7 @@ namespace opml::Examples
 
 
 		const size_t POP_SIZE;
-		const size_t WIDTH = 1024, HEIGHT = 600;
+		const int WIDTH = 1024, HEIGHT = 600;
 		const size_t XOFFSET = this->WIDTH / 4;
 		const float GRAVITY = 1000.0f;
 		const size_t MIN_PIP_OFFSET = 150, MAX_PIP_OFFSET = 250;
@@ -345,4 +348,4 @@ namespace opml::Examples
 		size_t offset{ opml::rng.next<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
 
 	};
-}
+}  // namespace Examples  // namespace opml

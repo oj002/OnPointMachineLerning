@@ -1,9 +1,9 @@
 #pragma once
+#include "..\data\TrainSet.hpp"
 #include "Functions\Error\ErrorFunction.hpp"
 #include "Layers\DenseLayer.hpp"
 #include "Layers\InputLayer.hpp"
 #include "Layers\OutputLayer.hpp"
-#include "..\data\TrainSet.hpp"
 #include <iomanip>
 #include <utility>
 
@@ -28,9 +28,9 @@ namespace opml
 				if (!this->inputLayer->matchingDimensions(in)) { return vector3D(); }
 				this->inputLayer->setInput(in);
 				this->inputLayer->feedForwardRecursive();
-				return getOutput();
 			} 
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			return getOutput();
 		}
 
 		// 24.4876
@@ -129,9 +129,9 @@ namespace opml
 			try
 			{
 				this->outputLayer->setErrorFunction(errorFunction);
-				return *this;
 			}
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			return *this;
 		}
 
 		inline vector3D getOutput() const noexcept { return this->outputLayer->output_values; }
@@ -149,10 +149,10 @@ namespace opml
 		}
 
 	private:
-		InputLayer* inputLayer;
+		InputLayer* inputLayer{};
 		OutputLayer* outputLayer{};
 		size_t iterations{ 0 };
 
-		double overall_error;
+		double overall_error{};
 	};
 } // namespace opml

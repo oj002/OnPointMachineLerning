@@ -1,6 +1,6 @@
 #pragma once
-#include "DNA.hpp"
 #include "../Utils/Utils.hpp"
+#include "DNA.hpp"
 
 namespace opml
 {
@@ -53,7 +53,7 @@ namespace opml
 			{
 				size_t index{ opml::rng.next<size_t>(0, this->population.size() - 1) };
 
-				float r{ opml::rng.next<float>(0, maxfit) };
+				double r{ opml::rng.next<double>(0, maxfit) };
 				if (r < this->population[index]->fitness)
 				{
 					return this->population[index];
@@ -69,4 +69,4 @@ namespace opml
 
 		std::vector<std::shared_ptr<T>> population;
 	};
-}
+} // namespace opml

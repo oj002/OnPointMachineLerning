@@ -5,15 +5,15 @@ namespace opml
 {
 	struct Midpoint : public CrossoverFunction
 	{
-		virtual inline std::vector<double> crossover(const std::vector<double> &parentA, const std::vector<double> &parentB) const
+		inline std::vector<double> crossover(const std::vector<double> &parentA, const std::vector<double> &parentB) const override
 		{
 			try
 			{
 				if (parentA.size() == 1)
 				{
-					return (opml::rng.next<unsigned short>(0, 1) ? parentA : parentB);
+					return (opml::rng.next<size_t>(0, 1) != 0u ? parentA : parentB);
 				}
-				size_t mid{ opml::rng.next<unsigned short>(0, parentA.size() - 1) };
+				size_t mid{ opml::rng.next<size_t>(0, parentA.size() - 1) };
 
 				std::vector<double> child{ parentA };
 				if (mid == 0)

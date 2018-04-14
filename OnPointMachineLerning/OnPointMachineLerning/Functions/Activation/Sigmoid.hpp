@@ -12,7 +12,7 @@ namespace opml
 			{
 				return 1.0 / (1.0 + std::exp(-x));
 			}
-			catch (std::exception &e) { out_opml << e.what() << '\n'; }
+			catch (std::exception &e) { out_opml << e.what() << '\n'; return x; }
 		}
 
 		inline double activation_prime(double x) const noexcept override
