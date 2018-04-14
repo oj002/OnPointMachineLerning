@@ -138,9 +138,16 @@ namespace opml::Examples
 		}
 
 	private:
-		void caputure(const std::string path = "out.svg")
+		void caputure(const std::string path = "out")
 		{
-			std::ofstream fout(path);
+			renderTexture.clear();
+			renderTexture.draw(this->dna);
+			renderTexture.display();
+
+			sf::Image img{ renderTexture.getTexture().copyToImage() };
+			img.saveToFile(path + ".png");
+
+			std::ofstream fout(path + ".svg");
 			fout << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 			fout << "<!DOCTYPE svg>\n";
 			fout << "<svg viewBox=\"0 0 " << std::to_string(this->WIDTH) << ' ' << std::to_string(this->HEIGHT) << "\" xmlns=\"http://www.w3.org/2000/svg\">\n";
@@ -151,7 +158,7 @@ namespace opml::Examples
 				fout << std::to_string(static_cast<unsigned char>(this->dna[i + 1].position.x)) << ',' << std::to_string(static_cast<unsigned char>(this->dna[i + 1].position.y)) << ' ';
 				fout << std::to_string(static_cast<unsigned char>(this->dna[i + 2].position.x)) << ',' << std::to_string(static_cast<unsigned char>(this->dna[i + 2].position.y)) << "\" fill=\"rgba(";
 				fout << std::to_string(this->dna[i].color.r) << ',' << std::to_string(this->dna[i].color.g) << ',';
-				fout << std::to_string(this->dna[i].color.b) << ',' << std::to_string(static_cast<double>(this->dna[i].color.a) / 255.0) << ")\"/>\n"; // a dosn't work
+				fout << std::to_string(this->dna[i].color.b) << ")\" fill-opacity=\"" << std::to_string(static_cast<double>(this->dna[i].color.a) / 255.0) << "\"/>\n"; // a dosn't work
 			}
 			fout << "</svg>";
 			fout.close();
