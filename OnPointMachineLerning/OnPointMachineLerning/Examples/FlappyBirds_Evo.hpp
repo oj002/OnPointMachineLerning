@@ -25,9 +25,9 @@ namespace opml::Examples
 			this->layer_sizes.emplace_back(2); // 1: x Distance to pipe 2: y Distance to Pipe gap
 			(this->layer_sizes.push_back(layerSizes), ...);
 			this->layer_sizes.emplace_back(1); // x > 0.5 ? flap : don't flap
-			for (size_t i = 0; i < layer_sizes.size(); i++)
+			for (size_t layer_size : layer_sizes)
 			{
-				totalNodeCount += layer_sizes[i];
+				totalNodeCount += layer_size;
 			}
 
 			this->wnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE, sf::Style::Close | sf::Style::Titlebar);
@@ -54,12 +54,11 @@ namespace opml::Examples
 		void run()
 		{
 			Clock fpsC;
-			Clock c;
 			size_t fps{ 0 };
 			while (this->wnd.isOpen())
 			{
 				++generationFrameCounter;
-				float dt = 1 / 60.0f;// std::min(c.restart<float>(), 0.1f);
+				const float dt = 1 / 60.0f;// std::min(c.restart<float>(), 0.1f);
 				this->update(dt);
 				this->render();
 
@@ -95,7 +94,7 @@ namespace opml::Examples
 						{
 							if (this->birds[i].alive)
 							{
-								for (Pipes::PipeShape& p : this->pipes.shapes)
+								for (const Pipes::PipeShape& p : this->pipes.shapes)
 								{
 									if (p.focused)
 									{
@@ -190,8 +189,8 @@ namespace opml::Examples
 		void render()
 		{
 			this->wnd.clear();
-			this->pipes.draw(wnd);
-			for (Bird &bird : this->birds)
+			this->pipes.draw(&wnd);
+			for (const Bird &bird : this->birds)
 			{
 				this->wnd.draw(bird.shape);
 			}
@@ -227,7 +226,7 @@ namespace opml::Examples
 		struct Bird
 		{
 			explicit Bird(sf::RectangleShape shape) : shape(std::move(shape)) {}
-			void flap() { flaped = true; }
+			void flap() noexcept { flaped = true; }
 			void update(float dt, size_t xOffset, float gravity)
 			{
 				if (flaped && vel > gravity / 10.0f)
@@ -288,12 +287,12 @@ namespace opml::Examples
 
 			
 
-			void draw(sf::RenderWindow &wnd)
+			void draw(gsl::not_null<sf::RenderWindow*> wnd)
 			{
-				for (PipeShape &shape : shapes)
+				for (const PipeShape &shape : shapes)
 				{
-					wnd.draw(shape.top);
-					wnd.draw(shape.bottom);
+					wnd->draw(shape.top);
+					wnd->draw(shape.bottom);
 				}
 			}
 
@@ -348,4 +347,4 @@ namespace opml::Examples
 		size_t offset{ opml::rng.next<size_t>(this->MIN_PIP_OFFSET, this->MAX_PIP_OFFSET) };
 
 	};
-}  // namespace Examples  // namespace opml
+}  // namespace opml::Examples

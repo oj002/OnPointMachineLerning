@@ -13,6 +13,10 @@ namespace opml
 			: Layer(1, 1, OUTPUT_HEIGHT)
 		{}
 		
+		virtual ~DenseLayer()
+		{
+		}
+
 		void calculate() override
 		{
 			const std::vector<double> prev_output_values00(this->prev_layer->get_output_values()[0][0]);
@@ -77,20 +81,20 @@ namespace opml
 			}
 		}
 
-		DenseLayer& setActivationFunction(const std::shared_ptr<ActivationFunction>& activationFunc)
+		DenseLayer& setActivationFunction(const std::shared_ptr<ActivationFunction>& activationFunc) noexcept
 		{
 			this->activationFunction = activationFunc;
 			return *this;
 		}
 
-		DenseLayer& weightsRange(double lower, double upper)
+		DenseLayer& weightsRange(double lower, double upper) noexcept
 		{
 			this->lowerWeightsRange = lower;
 			this->upperWeightsRange = upper;
 			return *this;
 		}
 
-		DenseLayer& biasRange(double lower, double upper)
+		DenseLayer& biasRange(double lower, double upper) noexcept
 		{
 			this->lowerBiasRange = lower;
 			this->upperBiasRange = upper;
@@ -98,7 +102,7 @@ namespace opml
 		}
 
 	protected:
-		void calculateOutputDimensions() override {}
+		void calculateOutputDimensions() noexcept override {}
 		void on_build() override
 		{
 			weights.resize(this->OUTPUT_HEIGHT, std::vector<double>(this->INPUT_HEIGHT, 0.0));

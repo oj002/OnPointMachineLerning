@@ -6,7 +6,7 @@
 
 namespace opml
 {
-	static std::string message(const std::string &msg, size_t line, const std::string &function, const std::string &path)
+	static std::string message(const std::string& msg, size_t line, const std::string& function, const std::string& path)
 	{
 		return "opml_message: " + msg + "\nat line: " + std::to_string(line) + " in function: " + function + "\nfrom file: " + path;
 	}
@@ -25,17 +25,21 @@ namespace opml
 		std::string function, path;
 	};
 
-	static class dualOutputStream
+	class dualOutputStream
 	{
 	public:
-		explicit dualOutputStream(const std::string &filename) noexcept
+		explicit dualOutputStream(const std::string &filename = "opml_log.txt") noexcept
+			: path(filename)
 		{
 			try { fout.open(filename, std::ios::trunc); }
 			catch (std::exception const& e) {
 				std::cerr << "There was an error in OpmlDualOutputStream(const std::string &filename): " << e.what() << std::endl;
 			}
 		}
-
+		dualOutputStream(const dualOutputStream &copy) = delete;
+		dualOutputStream(const dualOutputStream &&moved) = delete;
+		dualOutputStream &operator=(dualOutputStream other) = delete;
+		dualOutputStream &operator=(dualOutputStream &&other) = delete;
 		~dualOutputStream() noexcept { fout.close(); }
 
 		template<class T>
@@ -51,10 +55,12 @@ namespace opml
 			return *this;
 		}
 	private:
+		const std::string path;
 		std::ofstream fout;
-	} out_opml("opml_log.txt");
+	};
+	static dualOutputStream out_opml;
 }  // namespace opml
 
-#define OPML_INTERNAL_CATCH catch(std::exception &e) { OPML_THROW(e.what()); }
 #define OPML_MESSAGE(msg) opml::message(msg,  __LINE__, __FUNCTION__, __FILE__)
 #define OPML_THROW(x) throw opml::exeption(x, __LINE__, __FUNCTION__, __FILE__)
+#define OPML_INTERNAL_CATCH catch(std::exception &e) { OPML_THROW(e.what()); }

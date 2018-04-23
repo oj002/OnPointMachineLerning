@@ -13,7 +13,7 @@ namespace opml::Examples
 	{
 	public:
 		template<typename ...Args>
-		explicit Mnist_NN(Args... layerSizes)
+		explicit Mnist_NN(Args... layerSizes) noexcept
 			: networkBuilder(1, 1, 28 * 28)
 			, set(1, 1, 28 * 28, 1, 1, 10)
 			, testSet(1, 1, 28 * 28, 1, 1, 10)
@@ -132,7 +132,7 @@ namespace opml::Examples
 		}
 
 	private:
-		void load_mnist_TrainingData(const char* filename, opml::TrainSet* dataSet, size_t trainingSize)
+		void load_mnist_TrainingData(gsl::not_null<const char*> filename, opml::TrainSet* dataSet, size_t trainingSize)
 		{
 			std::ifstream fin(filename);
 			if (fin.is_open())
@@ -170,4 +170,4 @@ namespace opml::Examples
 		opml::DenseLayer lastDenseLayer;
 		std::shared_ptr<Sigmoid> sigmoid = std::make_shared<Sigmoid>();
 	};
-} // namespace Examples // namespace opml
+} // namespace Examples::opml

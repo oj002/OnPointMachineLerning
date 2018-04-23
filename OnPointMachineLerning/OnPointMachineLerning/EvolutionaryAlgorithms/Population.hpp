@@ -11,7 +11,7 @@ namespace opml
 
 		void nextGeneration(double mutationChance, double mutationAmount)
 		{
-			size_t popSize{ this->population.size() };
+			const size_t popSize{ this->population.size() };
 			std::vector<std::shared_ptr<T>> newPopulation{ this->population };
 			double maxfit{ 0 };
 			size_t index{ 0 };
@@ -25,12 +25,11 @@ namespace opml
 			}
 			std::shared_ptr<T> best(newPopulation[index]);
 
-			OPML_PRAGMA_OMP(parallel for)
 			for (int i = 0; i < popSize; ++i)
 			{
 				std::shared_ptr<T> parentA{ acceptReject(maxfit) };
 				std::shared_ptr<T> parentB{ acceptReject(maxfit) };
-				std::shared_ptr<T> childNet{ parentA->crossover(parentB) };
+				std::shared_ptr<T> childNet{ parentA->crossover(parentB.get()) };
 				if (rng.next<double>(0, 100) < mutationChance)
 				{
 					childNet->mutate(mutationAmount);
@@ -51,9 +50,9 @@ namespace opml
 			size_t besave{ 0 };
 			while (true)
 			{
-				size_t index{ opml::rng.next<size_t>(0, this->population.size() - 1) };
+				const size_t index{ opml::rng.next<size_t>(0, this->population.size() - 1) };
 
-				double r{ opml::rng.next<double>(0, maxfit) };
+				const double r{ opml::rng.next<double>(0, maxfit) };
 				if (r < this->population[index]->fitness)
 				{
 					return this->population[index];

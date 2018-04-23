@@ -22,13 +22,13 @@ namespace opml
 			}
 		}
 
-		void calculate() override{}
-		void backpropError() override{}
-		void updateWeights(double   /*eta*/) override{}
+		void calculate() noexcept override{}
+		void backpropError() noexcept override{}
+		void updateWeights(double   /*eta*/) noexcept override{}
 
 	protected:
-		void calculateOutputDimensions() override{}
-		void on_build() override{}
+		void calculateOutputDimensions() noexcept override{}
+		void on_build() noexcept override{}
 
 	};
 }  // namespace opml

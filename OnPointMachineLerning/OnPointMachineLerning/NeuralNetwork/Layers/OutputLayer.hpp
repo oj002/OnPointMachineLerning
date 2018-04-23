@@ -23,15 +23,15 @@ namespace opml
 		{
 			this->prev_layer->set_output_error_values(this->output_error_values);
 		}
-		void updateWeights(double  /*eta*/) override {}
+		void updateWeights(double  /*eta*/) noexcept override {}
 
-		void calculateOutputErrorSignals(const vector3D& target);
-		double overall_error(const vector3D& target);
+		void calculateOutputErrorSignals(const vector3D& target) noexcept;
+		double overall_error(const vector3D& target) noexcept;
 
 		OutputLayer setErrorFunction(const std::shared_ptr<ErrorFunction>& errorFunc);
 
 	protected:
-		void calculateOutputDimensions() override 
+		void calculateOutputDimensions() noexcept override 
 		{
 			this->OUTPUT_DEPTH = this->INPUT_DEPTH;
 			this->OUTPUT_WIDTH = this->INPUT_WIDTH;

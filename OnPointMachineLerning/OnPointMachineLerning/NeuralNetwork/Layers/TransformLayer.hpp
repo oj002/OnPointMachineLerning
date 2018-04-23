@@ -18,7 +18,7 @@ namespace opml
 				{
 					for (size_t j = 0; j < this->INPUT_HEIGHT; ++j)
 					{
-						size_t index = map(i, n, j);
+						const size_t index = map(i, n, j);
 						output_values00[index] = this->prev_layer->get_output_values()[i][n][j];
 						output_derivative_values00[index] = this->prev_layer->get_output_derivative_values()[i][n][j];
 					}
@@ -39,29 +39,28 @@ namespace opml
 				{
 					for (size_t j = 0; j < this->INPUT_HEIGHT; ++j)
 					{
-						size_t index = map(i, n, j);
-						temp[i][n][j] = output_error_values00[index];
+						temp[i][n][j] = output_error_values00[map(i, n, j)];
 					}
 				}
 			}
 
 			this->prev_layer->set_output_error_values(temp);
 		}
-		void updateWeights(double  /*eta*/) override
+		void updateWeights(double  /*eta*/) noexcept override
 		{
 		}
 
 	protected:
-		void calculateOutputDimensions() override 
+		void calculateOutputDimensions() noexcept override
 		{
 			this->OUTPUT_DEPTH = 1;
 			this->OUTPUT_WIDTH = 1;
 			this->OUTPUT_HEIGHT = this->INPUT_HEIGHT * this->INPUT_DEPTH * this->INPUT_HEIGHT;
 		}
-		void on_build() override { }
+		void on_build() noexcept override { }
 
 	private:
-		size_t map(size_t d, size_t w, size_t h)
+		size_t map(size_t d, size_t w, size_t h) noexcept
 		{
 			return (d * (this->INPUT_WIDTH * this->INPUT_HEIGHT) + w * this->INPUT_HEIGHT + h);
 		}

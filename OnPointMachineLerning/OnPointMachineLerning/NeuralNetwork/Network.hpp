@@ -14,7 +14,7 @@ namespace opml
 	public:
 		Network() = default;
 
-		Network(InputLayer* inputLayer, OutputLayer*  outputLayer)
+		Network(InputLayer* inputLayer, OutputLayer*  outputLayer) noexcept
 			: inputLayer(inputLayer)
 			, outputLayer(outputLayer)
 			, overall_error(1.0)
@@ -44,7 +44,7 @@ namespace opml
 					return;
 				}
 				this->calculate(input);
-				double error = this->outputLayer->overall_error(target);
+				const double error = this->outputLayer->overall_error(target);
 				this->overall_error += error;
 				if (error > wishError * 0.5)
 				{
@@ -124,7 +124,7 @@ namespace opml
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		inline Network setErrorFunction(const std::shared_ptr<ErrorFunction>& errorFunction) const
+		inline Network setErrorFunction(std::shared_ptr<ErrorFunction> errorFunction) const
 		{
 			try
 			{

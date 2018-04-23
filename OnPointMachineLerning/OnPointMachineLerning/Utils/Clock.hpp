@@ -7,13 +7,13 @@ namespace opml
 	class Clock
 	{
 	public:
-		Clock()
-			try : m_start(std::chrono::steady_clock::now())
+		Clock() noexcept
+			: m_start(std::chrono::steady_clock::now())
 		{
-		} OPML_INTERNAL_CATCH
+		}
 
 		template<typename T>
-		T restart()
+		T restart() noexcept
 		{
 			try
 			{
@@ -24,20 +24,16 @@ namespace opml
 			} OPML_INTERNAL_CATCH
 		}
 
-		void restart()
+		void restart() noexcept
 		{
-			try{ m_start = std::chrono::steady_clock::now(); }
-			OPML_INTERNAL_CATCH
+			m_start = std::chrono::steady_clock::now();
 		}
 
 		template<typename T>
-		T getElapsedTime() const
+		T getElapsedTime() const noexcept
 		{
-			try 
-			{
-				const std::chrono::duration<T> elapsedTime = std::chrono::steady_clock::now() - m_start;
-				return elapsedTime.count();
-			} OPML_INTERNAL_CATCH
+			const std::chrono::duration<T> elapsedTime = std::chrono::steady_clock::now() - m_start;
+			return elapsedTime.count();
 		}
 
 	private:

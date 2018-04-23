@@ -2,6 +2,7 @@
 #include "Exeptions.hpp"
 #include "Random.hpp"
 #include <algorithm>
+#include <gsl\gsl>
 #include <vector>
 
 #ifdef _DEBUG
@@ -33,7 +34,7 @@ namespace opml
 		} OPML_INTERNAL_CATCH
 	}
 
-	static void randomizeVec(std::vector<double>* vec, double lowerBound, double upperBound)
+	static void randomizeVec(gsl::not_null<std::vector<double>*> vec, double lowerBound, double upperBound)
 	{
 		try 
 		{
@@ -44,7 +45,7 @@ namespace opml
 		} OPML_INTERNAL_CATCH
 	}
 
-	static void randomizeVec(vector2D* vec, double lowerBound, double upperBound)
+	static void randomizeVec(gsl::not_null<vector2D*> vec, double lowerBound, double upperBound)
 	{
 		try
 		{
@@ -55,7 +56,7 @@ namespace opml
 		} OPML_INTERNAL_CATCH
 	}
 
-	static void randomizeVec(vector3D* vec, double lowerBound, double upperBound)
+	static void randomizeVec(gsl::not_null<vector3D*> vec, double lowerBound, double upperBound)
 	{
 		try
 		{
@@ -66,7 +67,7 @@ namespace opml
 		} OPML_INTERNAL_CATCH
 	}
 
-	static void randomizeVec(vector4D* vec, double lowerBound, double upperBound)
+	static void randomizeVec(gsl::not_null<vector4D*> vec, double lowerBound, double upperBound)
 	{
 		try
 		{
@@ -117,8 +118,8 @@ namespace opml
 			return index;
 		} OPML_INTERNAL_CATCH
 	}
-
-	static inline double randomValue(double lower, double upper) 
+	
+	static inline double randomValue(double lower, double upper) noexcept
 	{
 		return opml::rng.next<double>(lower, upper);
 	}

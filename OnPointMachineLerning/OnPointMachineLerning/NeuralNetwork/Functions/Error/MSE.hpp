@@ -24,12 +24,12 @@ namespace opml
 					}
 				}
 
-				size_t count = output_values.size() * output_values[0].size() * output_values[0][0].size();
+				const size_t count = output_values.size() * output_values[0].size() * output_values[0][0].size();
 				return v / (2.0 * static_cast<double>(count));
 			} catch (std::exception &e) { out_opml << e.what() << '\n'; return 1.0; }
 		}
 
-		inline void apply(OutputLayer* outputLayer, const vector3D& target) const noexcept override
+		inline void apply(gsl::not_null<OutputLayer*> outputLayer, const vector3D& target) const noexcept override
 		{
 			try
 			{

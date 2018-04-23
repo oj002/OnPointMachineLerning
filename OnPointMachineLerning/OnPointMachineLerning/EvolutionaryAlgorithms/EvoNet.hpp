@@ -63,7 +63,7 @@ namespace opml
 		{
 			try
 			{
-				for (vector2D &vec2 : weights)
+				for (vector2D &vec2 : this->weights)
 				{
 					for (std::vector<double> &vec : vec2)
 					{
@@ -80,11 +80,11 @@ namespace opml
 			catch (std::exception &e) { out_opml << e.what() << '\n'; }
 		}
 
-		std::shared_ptr<EvoNet> crossover(const std::shared_ptr<EvoNet> parent) const noexcept override
+		std::shared_ptr<EvoNet> crossover(const EvoNet *parent) const noexcept override
 		{
 			try
 			{
-				std::shared_ptr<EvoNet> ret{ parent };
+				std::shared_ptr<EvoNet> ret{ std::make_shared<EvoNet>(*this) };
 				vector3D newWeights{ this->weights };
 				for (size_t i = 0; i < this->weights.size(); ++i)
 				{
@@ -99,7 +99,7 @@ namespace opml
 				ret->weights = newWeights;
 				return ret;
 			}
-			catch (std::exception &e) { out_opml << e.what() << '\n'; return parent; }
+			catch (std::exception &e) { out_opml << e.what() << '\n'; return std::make_shared<EvoNet>(*this); }
 		}
 
 		void setActivationFunction(std::shared_ptr<ActivationFunction> newActivationFunction) noexcept

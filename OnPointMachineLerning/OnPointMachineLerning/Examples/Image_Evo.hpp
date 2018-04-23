@@ -24,7 +24,7 @@ namespace opml::Examples
 
 			this->targetWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Target", sf::Style::Close | sf::Style::Titlebar);
 			this->outputWnd.create(sf::VideoMode(this->WIDTH, this->HEIGHT), this->TITLE + "-Output", sf::Style::Close | sf::Style::Titlebar);
-			sf::VideoMode mode(sf::VideoMode::getDesktopMode());
+			const sf::VideoMode mode(sf::VideoMode::getDesktopMode());
 			this->targetWnd.setPosition(sf::Vector2i(mode.width / 2 - this->WIDTH - 100, mode.height / 2 - this->HEIGHT / 2));
 
 			this->outputImg.create(this->WIDTH, this->HEIGHT);
@@ -35,7 +35,7 @@ namespace opml::Examples
 				dna[i].position = sf::Vector2f(static_cast<float>(rng.next<unsigned int>(0, this->WIDTH)), static_cast<float>(rng.next<unsigned int>(0, this->HEIGHT)));
 				if (i % 3 == 0)
 				{
-					dna[i].color = sf::Color(static_cast<sf::Uint8>(rng.next<short>(1, 255)), static_cast<sf::Uint8>(rng.next<short>(1, 255)), static_cast<sf::Uint8>(rng.next<short>(1, 255)), 1);
+					dna[i].color = sf::Color(static_cast<sf::Uint8>(rng.next<uint16_t>(1, 255)), static_cast<sf::Uint8>(rng.next<uint16_t>(1, 255)), static_cast<sf::Uint8>(rng.next<uint16_t>(1, 255)), 1);
 					dna[i + 1].color = dna[i].color;
 					dna[i + 2].color = dna[i].color;
 				}
@@ -90,7 +90,7 @@ namespace opml::Examples
 			for (size_t i = 0; i < 100; ++i)
 			{
 				sf::VertexArray newDNA{ dna };
-				mutate(newDNA);
+				mutate(&newDNA);
 
 				renderTexture.clear();
 				renderTexture.draw(newDNA);
@@ -103,12 +103,12 @@ namespace opml::Examples
 				{
 					double partialError{ 0 };
 					OPML_PRAGMA_OMP(for)
-					for (int x = 0; x < static_cast<int>(this->WIDTH); ++x)
+					for (int x = 0; x < gsl::narrow_cast<int>(this->WIDTH); ++x)
 					{
 						for (unsigned int y = 0; y < this->HEIGHT; ++y)
 						{
-							sf::Color c(img.getPixel(x, y));
-							sf::Color target(targetImg.getPixel(x, y));
+							const sf::Color c(img.getPixel(x, y));
+							const sf::Color target(targetImg.getPixel(x, y));
 							partialError += std::abs(c.r - target.r) + std::abs(c.g - target.g) + std::abs(c.b - target.b);
 						}
 					}
@@ -165,111 +165,111 @@ namespace opml::Examples
 		}
 
 		template <typename T>
-		T clip(const T& n, const T& lower, const T& upper) {
+		T clip(const T& n, const T& lower, const T& upper) noexcept {
 			return std::max(lower, std::min(n, upper));
 		}
 
-		void mutate(sf::VertexArray &_dna)
+		void mutate(gsl::not_null<sf::VertexArray*> _dna)
 		{
-			double roulette{ rng.next<double>(0, 2.8) };
-			double drastic{ rng.next<double>(0, 1.0) };
+			const double roulette{ rng.next<double>(0, 2.8) };
+			const double drastic{ rng.next<double>(0, 1.0) };
 
 			if (roulette < 1.0)
 			{
-				size_t index{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
+				const size_t index{ rng.next<size_t>(0, (_dna->getVertexCount() - 3) / 3) * 3 };
 				if (roulette < 0.25)
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].color.a += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
-						clip<uint8_t>(_dna[index].color.a, 1, 255);
-						_dna[index + 1].color.a = _dna[index].color.a;
-						_dna[index + 2].color.a = _dna[index].color.a;
+						_dna->operator[](index).color.a += gsl::narrow_cast<sf::Int8>(rng.next<int16_t>(-25, 25));
+						clip<uint8_t>(_dna->operator[](index).color.a, 1, 255);
+						_dna->operator[](index + 1).color.a = _dna->operator[](index).color.a;
+						_dna->operator[](index + 2).color.a = _dna->operator[](index).color.a;
 					}
 					else 
 					{
-						_dna[index].color.a = static_cast<sf::Uint8>(rng.next<short>(1, 255));
-						_dna[index + 1].color.a = _dna[index].color.a;
-						_dna[index + 2].color.a = _dna[index].color.a;
+						_dna->operator[](index).color.a = gsl::narrow_cast<sf::Uint8>(rng.next<int16_t>(1, 255));
+						_dna->operator[](index + 1).color.a = _dna->operator[](index).color.a;
+						_dna->operator[](index + 2).color.a = _dna->operator[](index).color.a;
 					}
 				}
 				else if (roulette < 0.5)
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].color.r += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
-						clip<uint8_t>(_dna[index].color.r, 0, 255);
-						_dna[index + 1].color.r = _dna[index].color.r;
-						_dna[index + 2].color.r = _dna[index].color.r;
+						_dna->operator[](index).color.r += gsl::narrow_cast<sf::Int8>(rng.next<int16_t>(-25, 25));
+						clip<uint8_t>(_dna->operator[](index).color.r, 0, 255);
+						_dna->operator[](index + 1).color.r = _dna->operator[](index).color.r;
+						_dna->operator[](index + 2).color.r = _dna->operator[](index).color.r;
 					} 
 					else
 					{ 
-						_dna[index].color.r = static_cast<sf::Uint8>(rng.next<short>(0, 255));
-						_dna[index + 1].color.r = _dna[index].color.r;
-						_dna[index + 2].color.r = _dna[index].color.r;
+						_dna->operator[](index).color.r = gsl::narrow_cast<sf::Uint8>(rng.next<int16_t>(0, 255));
+						_dna->operator[](index + 1).color.r = _dna->operator[](index).color.r;
+						_dna->operator[](index + 2).color.r = _dna->operator[](index).color.r;
 					}
 				}
 				else if (roulette < 0.75)
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].color.g += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
-						clip<uint8_t>(_dna[index].color.g, 0, 255);
-						_dna[index + 1].color.g = _dna[index].color.g;
-						_dna[index + 2].color.g = _dna[index].color.g;
+						_dna->operator[](index).color.g += gsl::narrow_cast<sf::Int8>(rng.next<int16_t>(-25, 25));
+						clip<uint8_t>(_dna->operator[](index).color.g, 0, 255);
+						_dna->operator[](index + 1).color.g = _dna->operator[](index).color.g;
+						_dna->operator[](index + 2).color.g = _dna->operator[](index).color.g;
 					} 
 					else 
 					{
-						_dna[index].color.g = static_cast<sf::Uint8>(rng.next<short>(0, 255));
-						_dna[index + 1].color.g = _dna[index].color.g;
-						_dna[index + 2].color.g = _dna[index].color.g;
+						_dna->operator[](index).color.g = gsl::narrow_cast<sf::Uint8>(rng.next<int16_t>(0, 255));
+						_dna->operator[](index + 1).color.g = _dna->operator[](index).color.g;
+						_dna->operator[](index + 2).color.g = _dna->operator[](index).color.g;
 					}
 				}
 				else
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].color.b += static_cast<sf::Uint8>(rng.next<short>(-25, 25));
-						clip<uint8_t>(_dna[index].color.b, 0, 255);
-						_dna[index + 1].color.b = _dna[index].color.b;
-						_dna[index + 2].color.b = _dna[index].color.b;
+						_dna->operator[](index).color.b += gsl::narrow_cast<sf::Int8>(rng.next<int16_t>(-25, 25));
+						clip<uint8_t>(_dna->operator[](index).color.b, 0, 255);
+						_dna->operator[](index + 1).color.b = _dna->operator[](index).color.b;
+						_dna->operator[](index + 2).color.b = _dna->operator[](index).color.b;
 					} 
 					else
 					{
-						_dna[index].color.b = static_cast<sf::Uint8>(rng.next<short>(0, 255));
-						_dna[index + 1].color.b = _dna[index].color.b;
-						_dna[index + 2].color.b = _dna[index].color.b;
+						_dna->operator[](index).color.b = gsl::narrow_cast<sf::Uint8>(rng.next<int16_t>(0, 255));
+						_dna->operator[](index + 1).color.b = _dna->operator[](index).color.b;
+						_dna->operator[](index + 2).color.b = _dna->operator[](index).color.b;
 					}
 				}
 			}
 			else if (roulette < 2.0)
 			{
-				size_t index{ rng.next<size_t>(0, _dna.getVertexCount() - 1) };
+				const size_t index{ rng.next<size_t>(0, _dna->getVertexCount() - 1) };
 				if (roulette < 1.5)
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].position.x += rng.next<unsigned int>(this->WIDTH / -5, this->WIDTH / 5);
-						clip<float>(_dna[index].position.x, 0.0f, static_cast<float>(this->WIDTH));
+						_dna->operator[](index).position.x += rng.next<unsigned int>(this->WIDTH / -5, this->WIDTH / 5);
+						clip<float>(_dna->operator[](index).position.x, 0.0f, static_cast<float>(this->WIDTH));
 					}
-					else { _dna[index].position.x = static_cast<float>(rng.next<unsigned int>(0, this->WIDTH)); }
+					else { _dna->operator[](index).position.x = static_cast<float>(rng.next<unsigned int>(0, this->WIDTH)); }
 				}
 				else
 				{
 					if (drastic < 0.75)
 					{
-						_dna[index].position.y += rng.next<unsigned int>(this->HEIGHT / -5, this->HEIGHT / 5);
-						clip<float>(_dna[index].position.y, 0.0f, static_cast<float>(this->HEIGHT));
-					} else { _dna[index].position.y = static_cast<float>(rng.next<unsigned int>(0, this->HEIGHT)); }
+						_dna->operator[](index).position.y += rng.next<unsigned int>(this->HEIGHT / -5, this->HEIGHT / 5);
+						clip<float>(_dna->operator[](index).position.y, 0.0f, static_cast<float>(this->HEIGHT));
+					} else { _dna->operator[](index).position.y = static_cast<float>(rng.next<unsigned int>(0, this->HEIGHT)); }
 				}
 			}
 			else
 			{
-				size_t index{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
-				size_t destination{ rng.next<size_t>(0, (_dna.getVertexCount() - 3) / 3) * 3 };
-				std::swap(_dna[index], _dna[destination]);
-				std::swap(_dna[index + 1], _dna[destination + 1]);
-				std::swap(_dna[index + 2], _dna[destination + 2]);
+				const size_t index{ rng.next<size_t>(0, (_dna->getVertexCount() - 3) / 3) * 3 };
+				const size_t destination{ rng.next<size_t>(0, (_dna->getVertexCount() - 3) / 3) * 3 };
+				std::swap(_dna->operator[](index), _dna->operator[](destination));
+				std::swap(_dna->operator[](index + 1), _dna->operator[](destination + 1));
+				std::swap(_dna->operator[](index + 2), _dna->operator[](destination + 2));
 			}
 		}
 

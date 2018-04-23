@@ -3,7 +3,6 @@
 #include "../OnPointMachineLerning/Examples/Image_Evo.hpp"
 #include <iostream>
 
-
 /*
 	Git can't push files larger than 100 mb
 	if they are bigger than 50 mb there will be a warning.
@@ -18,25 +17,28 @@
 
 int main()
 {
-	opml::Examples::Image_Evo imgEvo(350);
+	omp_set_num_threads(omp_get_max_threads() / 2);
+	opml::Examples::Image_Evo imgEvo(1000, "test.png");
 	imgEvo.run();
+	/*
 	opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
-	evo.run();
+	evo.run();*/
 
-	double total{ 0 };
+	/*double total{ 0 };
 	for (size_t i = 0; i < 10; i++)
 	{
-		opml::Clock c;
+		const opml::Clock c;
 		opml::Examples::Mnist_NN mnist(200);
 		mnist.train(5, 0.15, 0.001);
 		mnist.test();
-		double elapsed{ c.getElapsedTime<double>() };
+		const double elapsed{ c.getElapsedTime<double>() };
 		total += elapsed;
 		std::cout << "Time took: " << elapsed << "s" << std::endl;
 	}
-	std::cout << "Average: " << (total / 10.0) << "s" << std::endl;
+	std::cout << "Average: " << (total / 10.0) << "s" << std::endl;*/
 
 	// Average: 27.1962s
+	// Average: 26.6373s
 
 	system("pause");
 	return 0;

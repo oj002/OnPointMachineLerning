@@ -34,9 +34,9 @@ namespace opml
 		inline void set_output_derivative_values(const vector3D&  vec) { if (this->matchingDimensions(vec)) { this->output_derivative_values = vec; } }
 		inline void set_output_error_values(const vector3D&  vec) { if (this->matchingDimensions(vec)) { this->output_error_values = vec; } }
 
-		inline const vector3D& get_output_values() const { return this->output_values; }
-		inline const vector3D& get_output_derivative_values() const { return this->output_derivative_values; }
-		inline const vector3D& get_output_error_values() const { return this->output_error_values; }
+		inline const vector3D& get_output_values() const  noexcept { return this->output_values; }
+		inline const vector3D& get_output_derivative_values() const  noexcept { return this->output_derivative_values; }
+		inline const vector3D& get_output_error_values() const  noexcept { return this->output_error_values; }
 
 	protected:
 		virtual void calculateOutputDimensions() = 0;

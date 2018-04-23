@@ -17,7 +17,7 @@ namespace opml
 
 		inline double activation_prime(double x) const noexcept override
 		{
-			double temp = activation(x);
+			const double temp = activation(x);
 			return temp * (1 - temp);
 		}
 	};

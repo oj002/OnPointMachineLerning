@@ -6,12 +6,12 @@
 
 namespace opml
 {
-	void OutputLayer::calculateOutputErrorSignals(const vector3D&  target)
+	void OutputLayer::calculateOutputErrorSignals(const vector3D&  target) noexcept
 	{
 		this->errorFunction->apply(this, target);
 	}
 
-	double OutputLayer::overall_error(const vector3D&  target)
+	double OutputLayer::overall_error(const vector3D&  target) noexcept
 	{
 		return this->errorFunction->overall_error(*this, target);
 	}
