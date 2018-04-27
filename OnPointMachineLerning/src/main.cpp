@@ -17,11 +17,10 @@
 
 int main()
 {
-	omp_set_num_threads(omp_get_max_threads() / 2);
-	opml::Examples::Image_Evo imgEvo(1000, "test.png");
+	opml::Examples::Image_Evo imgEvo(250);
 	imgEvo.run();
-	/*
-	opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
+	
+	/*opml::Examples::FlappyBirds_Evo evo(100, 50.0, 35.0, 10);
 	evo.run();*/
 
 	/*double total{ 0 };

@@ -75,17 +75,17 @@ namespace opml::Examples
 				{
 					for (int y = 0; y < 28; ++y)
 					{
-						mat.at<cv::Vec3f>(x, y) = cv::Vec3f(static_cast<float>(input[0][0][x * 28 + y]));
+						mat.at<cv::Vec3f>(x, y) = cv::Vec3f(0.0f, static_cast<float>(input[0][0][x * 28 + y]), static_cast<float>(input[0][0][x * 28 + y]));
 					}
 				}
 				cv::resize(mat, mat, { 280, 280 });
 				if (resIndex == tarIndex)
 				{
-					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX , 2.5, { 0, 255, 0 });
+					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX, 2.5, { 0, 255, 0 }, 3);
 				}
 				else
 				{
-					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX, 2.5, { 0, 0, 255 });
+					cv::putText(mat, std::to_string(resIndex), { 120, 140 }, CV_FONT_HERSHEY_SIMPLEX, 2.5, { 0, 0, 255 }, 3);
 				}
 				
 				cv::putText(mat, "press any key to continue...", { 35, 250 }, CV_FONT_HERSHEY_SIMPLEX, 0.5, { 255, 255, 255 });
